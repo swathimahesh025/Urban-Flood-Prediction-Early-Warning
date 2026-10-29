@@ -1,0 +1,91 @@
+{% extends "auth_base.html" %}
+
+{% block title %}Resident Sign In | UrbanFloodGuard{% endblock %}
+
+{% block content %}
+<div class="form-card" style="border-top: 4px solid #4361ee;">
+    <div class="form-header" style="text-align: center; margin-bottom: 1.8rem;">
+        <div class="header-icon-badge" style="background: rgba(67, 97, 238, 0.15); color: #4361ee; margin: 0 auto 0.9rem; width: 58px; height: 58px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.6rem;">
+            🔐
+        </div>
+        <h2 style="font-size: 1.55rem; font-weight: 800; letter-spacing: -0.025em; color: #f1f5f9; margin-bottom: 0.3rem;">Sign In to UrbanFloodGuard</h2>
+        <p style="font-size: 0.85rem; color: #64748b;">Access your real-time risk logs and flood alerts</p>
+    </div>
+
+    <form action="{{ url_for('login') }}" method="POST">
+        <div class="form-group">
+            <label for="email" style="font-size: 0.85rem; font-weight: 600; color: #94a3b8; margin-bottom: 0.5rem; display: block;">Email Address</label>
+            <div class="input-wrapper">
+                <span class="input-icon">✉️</span>
+                <input
+                    type="email"
+                    id="email"
+                    name="email"
+                    class="form-control"
+                    placeholder="name@example.com"
+                    required
+                    autocomplete="email"
+                    autofocus
+                >
+            </div>
+        </div>
+
+        <div class="form-group" style="margin-top: 1rem;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
+                <label for="password" style="font-size: 0.85rem; font-weight: 600; color: #94a3b8; margin: 0;">Password</label>
+                <a href="{{ url_for('forgot_password') }}" style="color: #f72585; font-size: 0.82rem; text-decoration: none; font-weight: 600;">Forgot Password?</a>
+            </div>
+            <div class="input-wrapper">
+                <span class="input-icon">🔒</span>
+                <input
+                    type="password"
+                    id="password"
+                    name="password"
+                    class="form-control"
+                    placeholder="••••••••"
+                    required
+                    autocomplete="current-password"
+                >
+            </div>
+        </div>
+
+        <button type="submit" class="btn btn-primary btn-block" style="margin-top: 1.6rem; padding: 0.95rem; font-size: 0.95rem; font-weight: 700; border-radius: 12px;">
+            🚀 Sign In to Dashboard
+        </button>
+    </form>
+
+    <!-- Divider -->
+    <div style="display: flex; align-items: center; gap: 12px; margin: 1.6rem 0;">
+        <div style="flex: 1; height: 1px; background: rgba(255,255,255,0.08);"></div>
+        <span style="font-size: 0.78rem; color: #3a4260; font-weight: 600; white-space: nowrap;">New to HydroAlert?</span>
+        <div style="flex: 1; height: 1px; background: rgba(255,255,255,0.08);"></div>
+    </div>
+
+    <!-- Register Button: navigates to /signup which has Full Name + Email + Password + Confirm -->
+    <a href="{{ url_for('signup') }}" style="
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        width: 100%;
+        padding: 0.95rem;
+        border-radius: 12px;
+        background: linear-gradient(135deg, #f72585 0%, #7209b7 100%);
+        color: #ffffff;
+        font-size: 0.95rem;
+        font-weight: 700;
+        text-decoration: none;
+        transition: opacity 0.2s, transform 0.15s;
+        box-shadow: 0 4px 18px rgba(247, 37, 133, 0.35);
+    " onmouseover="this.style.opacity='0.9';this.style.transform='translateY(-1px)'"
+       onmouseout="this.style.opacity='1';this.style.transform='translateY(0)'">
+        ✨ Create New Account (Register)
+    </a>
+
+    <div style="text-align: center; margin-top: 1.4rem;">
+        <a href="{{ url_for('admin_login') }}" style="color: #3a4260; text-decoration: underline; font-size: 0.8rem;">
+            Administrative Access Portal →
+        </a>
+    </div>
+</div>
+{% endblock %}

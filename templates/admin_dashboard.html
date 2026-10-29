@@ -1,0 +1,171 @@
+{% extends "base.html" %}
+
+{% block title %}Municipal Disaster Analytics & Admin Dashboard | HydroAlert{% endblock %}
+{% block breadcrumb %}Municipal Admin Surveillance Portal{% endblock %}
+
+{% block extra_head %}
+<!-- Chart.js CDN -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+{% endblock %}
+
+{% block content %}
+<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem; flex-wrap: wrap; gap: 1rem;">
+    <div>
+        <h1 style="font-size: 2.1rem; font-weight: 800; letter-spacing: -0.02em; margin-bottom: 0.3rem;">
+            Disaster Management Analytics
+        </h1>
+        <p style="color: var(--text-muted); font-size: 0.95rem;">
+            Real-time urban telemetry, spatial risk clustering, and emergency alert audit trail.
+        </p>
+    </div>
+    <div style="display: flex; gap: 10px;">
+        <!--<a href="{{ url_for('dashboard') }}" class="btn btn-secondary">
+            <span>+ New Evaluation</span>
+        </a>-->
+        <a href="{{ url_for('admin_logout') }}" class="btn btn-danger">
+            <span>Sign Out</span>
+        </a>
+    </div>
+</div>
+
+<!-- Key Performance Metrics with Live Counting Animation -->
+<div class="stats-grid">
+    <div class="stats-card">
+        <div class="stat-bg-icon">📊</div>
+        <div class="stat-label">Total Predictions</div>
+        <div class="stat-number" data-target="{{ total_preds }}">{{ total_preds }}</div>
+        <div class="stat-subtext">Evaluated territory queries</div>
+    </div>
+
+    <div class="stats-card accent-pink">
+        <div class="stat-bg-icon">🚨</div>
+        <div class="stat-label">Critical Alerts</div>
+        <div class="stat-number" data-target="{{ high_risks }}" style="color: var(--accent-pink);">{{ high_risks }}</div>
+        <div class="stat-subtext">High Risk emergency events</div>
+    </div>
+
+    <div class="stats-card accent-green">
+        <div class="stat-bg-icon">👥</div>
+        <div class="stat-label">Active Users</div>
+        <div class="stat-number" data-target="{{ total_users }}" style="color: #34d399;">{{ total_users }}</div>
+        <div class="stat-subtext">Registered residents & officers</div>
+    </div>
+
+    
+</div>
+
+<!-- Chart.js Visualizations Grid -->
+<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(360px, 1fr)); gap: 1.8rem; margin-bottom: 2.5rem;">
+    <!-- Chart 1: Risk Distribution -->
+    <div class="table-card" style="margin-bottom: 0;">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.2rem;">
+            <h3 style="font-size: 1.15rem; font-weight: 700; margin: 0;">Risk Tier Distribution</h3>
+            <span style="font-size: 0.8rem; color: var(--text-muted);">Current Classification Ratio</span>
+        </div>
+        <div style="position: relative; height: 260px;">
+            <canvas id="riskDistributionChart"></canvas>
+        </div>
+    </div>
+
+    <!-- Chart 2: Daily Assessment Volume & Rainfall -->
+    <!--<div class="table-card" style="margin-bottom: 0;">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.2rem;">
+            <h3 style="font-size: 1.15rem; font-weight: 700; margin: 0;">Assessment Frequency & Rainfall</h3>
+            <span style="font-size: 0.8rem; color: var(--text-muted);">Chronological Trends</span>
+        </div>
+        <div style="position: relative; height: 260px;">
+            <canvas id="predictionTrendsChart"></canvas>
+        </div>
+    </div>-->
+</div>
+
+<!-- Leaflet Multi-Point Regional Map -->
+<div class="table-card" style="margin-bottom: 2.5rem; padding: 1.5rem;">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.2rem; flex-wrap: wrap; gap: 10px;">
+        <div>
+            <h3 style="font-size: 1.25rem; font-weight: 700; margin: 0;">Geographic Inundation Threat Map</h3>
+            <p style="font-size: 0.85rem; color: var(--text-muted); margin-top: 2px;">
+                Spatial markers of all logged prediction coordinates across regional sectors.
+            </p>
+        </div>
+        <div style="display: flex; gap: 12px; font-size: 0.85rem;">
+            <span class="status-badge badge-low">● Low Risk</span>
+            <span class="status-badge badge-med">● Medium Risk</span>
+            <span class="status-badge badge-high">● High Risk</span>
+        </div>
+    </div>
+    <div id="admin-map" style="height: 440px;"></div>
+</div>
+
+<!-- System Audit Log Table -->
+<div class="table-card">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.2rem;">
+        <div>
+            <h3 style="font-size: 1.25rem; font-weight: 700; margin: 0;">System Assessment Audit Log</h3>
+            <p style="font-size: 0.85rem; color: var(--text-muted); margin-top: 2px;">Comprehensive chronological assessment history</p>
+        </div>
+    </div>
+
+    <div class="table-responsive">
+        <table class="modern-table">
+            <thead>
+                <tr>
+                    <!--<th>ID</th>-->
+                    <th>Location</th>
+                    <!--<th>Coordinates</th>-->
+                    <th>Rainfall</th>
+                    <th>Humidity</th>
+                    <th>Wind</th>
+                    <th>Risk Tier</th>
+                    <!--<th>Confidence</th>-->
+                    <th>Emergency Alert</th>
+                    <th>Timestamp</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for r in recent_logs %}
+                <tr>
+                    <!--<td style="color: var(--text-muted); font-size: 0.85rem;">#{{ r.id }}</td>-->
+                    <td><strong>{{ r.location_name }}</strong></td>
+                    <!--<td style="font-size: 0.84rem; color: #94a3b8; font-family: monospace;">{{ "%.2f"|format(r.latitude) }}, {{ "%.2f"|format(r.longitude) }}</td>-->
+                    <td><strong>{{ r.rainfall }} mm</strong></td>
+                    <td>{{ r.humidity }}%</td>
+                    <td>{{ r.wind_speed }} m/s</td>
+                    <td>
+                        {% if r.risk_level == 'High Risk' %}
+                            <span class="status-badge badge-high">● High Risk</span>
+                        {% elif r.risk_level == 'Medium Risk' %}
+                            <span class="status-badge badge-med">● Medium Risk</span>
+                        {% else %}
+                            <span class="status-badge badge-low">● Low Risk</span>
+                        {% endif %}
+                    </td>
+                    <!--<td><strong style="color: #fff;">{{ "%.1f"|format(r.probability) }}%</strong></td>-->
+                    <td>
+                        {% if r.alert_triggered %}
+                            <span style="color: var(--accent-pink); font-weight: 700; font-size: 0.85rem;">🚨 Sent</span>
+                        {% else %}
+                            <span style="color: var(--text-dim); font-size: 0.85rem;">None</span>
+                        {% endif %}
+                    </td>
+                    <td style="color: var(--text-muted); font-size: 0.84rem; white-space: nowrap;">{{ r.created_at }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/map.js') }}"></script>
+<script src="{{ url_for('static', filename='js/charts.js') }}"></script>
+<script>
+    document.addEventListener("DOMContentLoaded", () => {
+        const points = {{ map_points|tojson|safe }};
+        if (points && points.length > 0) {
+            renderAdminOverviewMap(points);
+        }
+    });
+</script>
+{% endblock %}

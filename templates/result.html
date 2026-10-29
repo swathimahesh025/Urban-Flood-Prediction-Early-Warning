@@ -1,0 +1,303 @@
+{% extends "base.html" %}
+
+{% block title %}Flood Assessment: {{ pred.location_name }} | HydroAlert{% endblock %}
+{% block breadcrumb %}Assessment Report &bull; {{ pred.location_name }}{% endblock %}
+
+{% block content %}
+<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem; flex-wrap: wrap; gap: 1rem;">
+    <div>
+        <h1 style="font-size: 2.1rem; font-weight: 800; letter-spacing: -0.02em;">
+            Risk Assessment: {{ pred.location_name }}
+        </h1>
+        <p style="color: var(--text-muted); font-size: 0.95rem; margin-top: 0.2rem;">
+            Spatial Coordinates: {{ "%.4f"|format(pred.latitude) }}, {{ "%.4f"|format(pred.longitude) }} &bull; Timestamp: {{ pred.created_at }}
+        </p>
+        {% if zone_data and zone_data.basin_description %}
+        <div style="margin-top: 0.5rem; display: inline-flex; align-items: center; gap: 8px; background: rgba(67, 97, 238, 0.15); border: 1px solid rgba(67, 97, 238, 0.35); border-radius: 999px; padding: 4px 14px; font-size: 0.85rem; color: #a5b4fc; font-weight: 600;">
+            <span>🌊 Hydrological Basin:</span>
+            <strong style="color: #ffffff;">{{ zone_data.basin_description }}</strong>
+        </div>
+        {% endif %}
+    </div>
+    <div style="display: flex; gap: 10px;">
+        <a href="{{ url_for('dashboard') }}" class="btn btn-secondary">
+            <span>🔄 Refresh</span>
+        </a>
+        <button onclick="window.print()" class="btn btn-primary">
+            <span>🖨️ Export Report</span>
+        </button>
+    </div>
+</div>
+
+<!-- Dynamic Risk Banner -->
+<div class="risk-banner {{ theme.banner_class }}">
+    <div class="risk-info">
+        <div class="{{ theme.text_class }}" style="font-size: 0.82rem; text-transform: uppercase; font-weight: 700; letter-spacing: 0.08em;">
+            XGBoost Classification Result
+        </div>
+        <h2>{{ pred.risk_level }}</h2>
+        <p>
+            Evaluated under prevailing meteorological metrics with a classification certainty of <strong>{{ "%.1f"|format(pred.probability) }}%</strong>.
+            {% if pred.risk_level == 'High Risk' %}
+                <br/><strong style="color: #ff94c2;">🚨 Critical Emergency Alert Active: Evacuation protocols and automated warnings dispatched.</strong>
+            {% endif %}
+        </p>
+    </div>
+    <div>
+        <span class="status-badge {{ theme.badge_class }}" style="font-size: 1.15rem; padding: 0.65rem 1.8rem;">
+            ● {{ pred.risk_level }} ({{ "%.1f"|format(pred.probability) }}%)
+        </span>
+    </div>
+</div>
+
+<!-- Meteorological Metric Grid -->
+<div class="metrics-grid">
+    <div class="metric-card {{ theme.border_class }}">
+        <div class="metric-icon">🌧️</div>
+        <div class="metric-label">Precipitation</div>
+        <div class="metric-val {{ theme.text_class }}">{{ pred.rainfall }} <span style="font-size: 1rem; color: var(--text-muted); font-weight: 400;">mm</span></div>
+    </div>
+
+    <div class="metric-card">
+        <div class="metric-icon">💧</div>
+        <div class="metric-label">Relative Humidity</div>
+        <div class="metric-val">{{ pred.humidity }} <span style="font-size: 1rem; color: var(--text-muted); font-weight: 400;">%</span></div>
+    </div>
+
+    <div class="metric-card">
+        <div class="metric-icon">🌡️</div>
+        <div class="metric-label">Temperature</div>
+        <div class="metric-val">{{ pred.temperature }} <span style="font-size: 1rem; color: var(--text-muted); font-weight: 400;">°C</span></div>
+    </div>
+
+    <div class="metric-card">
+        <div class="metric-icon">💨</div>
+        <div class="metric-label">Wind Velocity</div>
+        <div class="metric-val">{{ pred.wind_speed }} <span style="font-size: 1rem; color: var(--text-muted); font-weight: 400;">m/s</span></div>
+    </div>
+
+    <div class="metric-card">
+        <div class="metric-icon">⏲️</div>
+        <div class="metric-label">Atmospheric Pressure</div>
+        <div class="metric-val">{{ pred.pressure }} <span style="font-size: 1rem; color: var(--text-muted); font-weight: 400;">hPa</span></div>
+    </div>
+</div>
+
+<!-- Leaflet Interactive Map -->
+<div class="table-card" style="margin-bottom: 2.2rem; padding: 1.5rem;">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.2rem; flex-wrap: wrap; gap: 8px;">
+        <div>
+            <h3 style="font-size: 1.25rem; font-weight: 700; margin: 0;">GIS Spatial Threat Zone</h3>
+            <p style="font-size: 0.85rem; color: var(--text-muted); margin-top: 2px;">
+                OpenStreetMap tile layer with color-coded risk radius centered on {{ pred.location_name }}
+            </p>
+        </div>
+        <span style="font-size: 0.8rem; padding: 4px 12px; border-radius: 999px; background: rgba(255,255,255,0.06); color: #cbd5e1; border: 1px solid var(--card-border);">
+            Layer: OpenStreetMap Standard
+        </span>
+    </div>
+    <div id="map"></div>
+</div>
+
+<!-- Contextual Safety Recommendations -->
+<div class="table-card {{ theme.border_class }}" style="margin-bottom: 2rem;">
+    <h3 class="{{ theme.text_class }}" style="font-size: 1.35rem; font-weight: 700; margin-bottom: 1.2rem; display: flex; align-items: center; gap: 10px;">
+        <span>🛡️</span> Actionable Safety & Evacuation Advisory
+    </h3>
+    <ul style="list-style: none; display: flex; flex-direction: column; gap: 0.9rem; padding: 0;">
+        {% for rec in recommendations %}
+            <li class="{{ theme.border_class }}" style="padding: 0.9rem 1.2rem; background: rgba(14, 14, 26, 0.7); border-radius: var(--radius-sm); font-size: 0.95rem; line-height: 1.5;">
+                {{ rec }}
+            </li>
+        {% endfor %}
+    </ul>
+</div>
+
+<!-- Emergency Alert Messaging & Notification Center -->
+{% if pred.risk_level == 'High Risk' %}
+<div class="table-card" style="border-top: 4px solid #ef4444; background: linear-gradient(135deg, rgba(239, 68, 68, 0.08) 0%, rgba(14, 14, 26, 0.85) 100%); margin-bottom: 2rem;">
+    <div style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 1rem; margin-bottom: 1.4rem;">
+        <div>
+            <div style="display: inline-flex; align-items: center; gap: 6px; background: rgba(239, 68, 68, 0.2); border: 1px solid rgba(239, 68, 68, 0.4); padding: 4px 12px; border-radius: 999px; font-size: 0.8rem; font-weight: 700; color: #ff6b8b; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.6rem;">
+                <span style="display: inline-block; width: 8px; height: 8px; border-radius: 50%; background: #ef4444; animation: pulse 1.2s infinite;"></span>
+                Active Emergency Alert Dispatch
+            </div>
+            <h3 style="font-size: 1.4rem; font-weight: 800; color: #ffffff; margin: 0;">
+                Emergency Broadcast System &bull; {{ pred.location_name }}
+            </h3>
+            <p style="font-size: 0.9rem; color: var(--text-muted); margin-top: 4px;">
+                Automated multi-channel early warning message pipeline for residents and district authorities.
+            </p>
+        </div>
+        <div style="text-align: right;">
+            <span class="status-badge badge-high" style="font-size: 0.9rem; padding: 6px 16px;">
+                🚨 High Risk Alert Active
+            </span>
+        </div>
+    </div>
+
+    <!-- Alert Broadcast Status Banner -->
+    <div style="background: rgba(14, 14, 26, 0.7); border: 1px solid rgba(239, 68, 68, 0.25); border-radius: var(--radius-md); padding: 1.2rem; margin-bottom: 1.5rem; display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1rem;">
+        <div>
+            <div style="font-size: 0.75rem; text-transform: uppercase; color: var(--text-dim); font-weight: 600;">Broadcast Status</div>
+            <div id="alertStatusBadge" style="font-size: 0.95rem; font-weight: 700; color: #34d399; margin-top: 3px;">
+                {% if alert_record %}
+                    {{ alert_record.status }}
+                {% else %}
+                    Active (In-App & Emergency Broadcast Logged)
+                {% endif %}
+            </div>
+        </div>
+        <div>
+            <div style="font-size: 0.75rem; text-transform: uppercase; color: var(--text-dim); font-weight: 600;">Primary Recipient</div>
+            <div style="font-size: 0.95rem; font-weight: 600; color: #f1f5f9; margin-top: 3px;">
+                {% if alert_record and alert_record.recipient_email %}
+                    {{ alert_record.recipient_email }}
+                {% elif session.get('user_email') %}
+                    {{ session.get('user_email') }}
+                {% else %}
+                    Registered Residents & Disaster Control
+                {% endif %}
+            </div>
+        </div>
+        <div>
+            <div style="font-size: 0.75rem; text-transform: uppercase; color: var(--text-dim); font-weight: 600;">Trigger Timestamp</div>
+            <div style="font-size: 0.95rem; font-weight: 600; color: #f1f5f9; margin-top: 3px;">
+                {{ alert_record.created_at if alert_record else pred.created_at }}
+            </div>
+        </div>
+    </div>
+
+    <!-- Interactive Direct Alert Dispatch Form -->
+    <div style="background: rgba(14, 14, 26, 0.9); border: 1px solid var(--card-border); border-radius: var(--radius-md); padding: 1.4rem; margin-bottom: 1.5rem;">
+        <h4 style="font-size: 1rem; font-weight: 700; color: #ffffff; margin-bottom: 0.4rem; display: flex; align-items: center; gap: 8px;">
+            <span>📨</span> Send Alert Message to Specific User / Alternate Email
+        </h4>
+        <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 1rem;">
+            Dispatch an emergency flood warning report directly to your personal email address or municipal responders.
+        </p>
+
+        <form id="directAlertForm" onsubmit="handleSendAlert(event)" style="display: flex; gap: 10px; flex-wrap: wrap;">
+            <div style="flex: 1; min-width: 260px;">
+                <input 
+                    type="email" 
+                    id="directAlertEmail" 
+                    class="form-control" 
+                    placeholder="Enter recipient email (e.g., resident@gmail.com)..." 
+                    value="{{ session.get('user_email', '') }}" 
+                    required
+                    style="padding: 0.75rem 1rem; font-size: 0.92rem;"
+                >
+            </div>
+            <button type="submit" id="btnSendAlert" class="btn btn-accent" style="padding: 0.75rem 1.6rem; font-size: 0.92rem;">
+                <span>⚡ Send Alert Message Now</span>
+            </button>
+        </form>
+        <div id="directAlertFeedback" style="display: none; margin-top: 1rem;" class="alert"></div>
+    </div>
+</div>
+{% endif %}
+{% endblock %}
+
+{% block scripts %}
+<!-- Structured JSON Payload for Map Initialization -->
+<script id="assessment-data" type="application/json">
+{
+    "latitude": {{ pred.latitude }},
+    "longitude": {{ pred.longitude }},
+    "locationName": {{ pred.location_name|tojson }},
+    "riskLevel": {{ pred.risk_level|tojson }},
+    "rainfall": {{ pred.rainfall }},
+    "probability": {{ pred.probability }},
+    "basinDescription": {{ (zone_data.basin_description if zone_data else '')|tojson }},
+    "predictionId": {{ pred.id }},
+    "floodHotspots": {{ (zone_data.flood_hotspots if zone_data and zone_data.get('flood_hotspots') else [])|tojson }}
+}
+</script>
+
+<script src="{{ url_for('static', filename='js/map.js') }}"></script>
+<script>
+    document.addEventListener("DOMContentLoaded", () => {
+        const dataElement = document.getElementById("assessment-data");
+        if (!dataElement) return;
+        const report = JSON.parse(dataElement.textContent);
+
+        renderSingleLocationMap(
+            report.latitude,
+            report.longitude,
+            report.locationName,
+            report.riskLevel,
+            report.rainfall,
+            report.probability,
+            report.basinDescription,
+            report.floodHotspots || []
+        );
+    });
+
+    async function handleSendAlert(e) {
+        e.preventDefault();
+        const emailInput = document.getElementById("directAlertEmail");
+        const btn = document.getElementById("btnSendAlert");
+        const feedback = document.getElementById("directAlertFeedback");
+        const badge = document.getElementById("alertStatusBadge");
+
+        const email = emailInput ? emailInput.value.trim() : "";
+        if (!email) return;
+
+        const dataElement = document.getElementById("assessment-data");
+        const report = dataElement ? JSON.parse(dataElement.textContent) : { predictionId: null };
+
+        btn.disabled = true;
+        btn.innerHTML = `<span>⏳ Transmitting Alert...</span>`;
+        feedback.style.display = "none";
+
+        try {
+            const resp = await fetch("/api/alerts/send", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    "Accept": "application/json"
+                },
+                body: JSON.stringify({
+                    prediction_id: report.predictionId,
+                    email: email
+                })
+            });
+
+            const result = await resp.json();
+            feedback.style.display = "block";
+            if (result.success && result.email_sent) {
+                feedback.className = "alert alert-success";
+                feedback.innerHTML = `✅ <strong>Live Email Delivered!</strong> The flood warning has been physically sent to <strong>${result.recipient}</strong> via SMTP. Please check your inbox or spam folder.`;
+                if (badge && result.status) {
+                    badge.innerText = result.status;
+                }
+            } else if (result.success && !result.email_sent) {
+                feedback.className = "alert alert-warning";
+                feedback.innerHTML = `
+                    <div style="line-height: 1.5;">
+                        <strong style="color: #f59e0b;">⚠️ Notice: Alert Saved In-App, but physical email was NOT sent to your inbox.</strong><br/>
+                        <span>Reason: <strong>Sender SMTP credentials (<code>MAIL_USERNAME</code> and <code>MAIL_PASSWORD</code>) are not configured in your <code>.env</code> file.</strong></span><br/>
+                        <span style="font-size: 0.85rem; margin-top: 5px; display: inline-block;">
+                            👉 To receive actual emails in your Gmail inbox, open <code>.env</code> in your project, enter your Gmail and 16-character App Password, and restart the app.
+                        </span>
+                    </div>
+                `;
+                if (badge && result.status) {
+                    badge.innerText = result.status;
+                }
+            } else {
+                feedback.className = "alert alert-danger";
+                feedback.innerText = result.error || "Failed to transmit alert message.";
+            }
+        } catch (err) {
+            feedback.style.display = "block";
+            feedback.className = "alert alert-danger";
+            feedback.innerText = "Network error encountered while communicating with alert service.";
+        } finally {
+            btn.disabled = false;
+            btn.innerHTML = `<span>⚡ Send Alert Message Now</span>`;
+        }
+    }
+</script>
+{% endblock %}
