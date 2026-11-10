@@ -1,0 +1,109 @@
+{% extends "base.html" %}
+
+{% block title %}Urban Flood Early Warning System | HydroAlert{% endblock %}
+{% block breadcrumb %}System Overview & Telemetry{% endblock %}
+
+{% block content %}
+<!-- Modern Hero Section -->
+<div style="background: linear-gradient(135deg, rgba(67, 97, 238, 0.15) 0%, rgba(247, 37, 133, 0.12) 100%); border: 1px solid var(--card-border); border-radius: var(--radius-lg); padding: 3.5rem 2.5rem; text-align: center; margin-bottom: 2.5rem; position: relative; overflow: hidden; box-shadow: var(--shadow-main);">
+    <div style="max-width: 820px; margin: 0 auto; position: relative; z-index: 2;">
+        <span style="display: inline-block; padding: 0.35rem 1rem; background: rgba(67, 97, 238, 0.2); border: 1px solid rgba(67, 97, 238, 0.4); border-radius: 999px; font-size: 0.8rem; font-weight: 700; color: #7090ff; letter-spacing: 0.05em; text-transform: uppercase; margin-bottom: 1.2rem;">
+             Urban Hydrology Intelligence
+        </span>
+        <h1 style="font-size: 2.8rem; font-weight: 800; line-height: 1.2; letter-spacing: -0.03em; margin-bottom: 1.2rem; background: linear-gradient(180deg, #ffffff 0%, #cbd5e1 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">
+            Urban Flood Prediction & Early Warning System Using XGBoost
+        </h1>
+        <p style="font-size: 1.1rem; color: var(--text-muted); max-width: 680px; margin: 0 auto 2.2rem; line-height: 1.6;">
+            Safeguarding metropolitan populations using direct XGBoost machine learning modeling, real-time OpenWeatherMap ingestion, and dynamic Leaflet.js hazard mapping.
+        </p>
+        <div style="display: flex; gap: 14px; justify-content: center; flex-wrap: wrap;">
+            <a href="{{ url_for('dashboard') }}" class="btn btn-primary" style="padding: 1rem 2.2rem; font-size: 1.05rem;">
+                🚀 Start Flood Assessment
+            </a>
+            <a href="{{ url_for('custom_location') }}" class="btn btn-accent" style="padding: 1rem 2rem; font-size: 1.05rem;">
+                🏙️ Search Any City
+            </a>
+        </div>
+    </div>
+</div>
+
+<!-- Architecture Highlight Grid -->
+<div style="margin-bottom: 2.5rem;">
+    <div style="text-align: center; margin-bottom: 2rem;">
+        <h2 style="font-size: 1.8rem; font-weight: 700;">Engineered for Instant Disaster Response</h2>
+        <p style="color: var(--text-muted); font-size: 0.95rem; margin-top: 0.3rem;">Modular end-to-end framework translating live meteorology into actionable safety warnings.</p>
+    </div>
+
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem;">
+        <div class="stats-card">
+            <div class="header-icon-badge" style="margin: 0 0 1.2rem; background: rgba(67, 97, 238, 0.15); color: var(--primary-blue);">🛰️</div>
+            <h3 style="font-size: 1.25rem; font-weight: 700; margin-bottom: 0.5rem;">Live Weather Telemetry</h3>
+            <p style="color: var(--text-muted); font-size: 0.92rem; line-height: 1.5;">Direct OpenWeatherMap streaming captures precipitation volume, air humidity, surface temperature, atmospheric pressure, and wind speed in real time.</p>
+        </div>
+
+        <div class="stats-card accent-pink">
+            <div class="header-icon-badge" style="margin: 0 0 1.2rem; background: rgba(247, 37, 133, 0.15); color: var(--accent-pink);">🧠</div>
+            <h3 style="font-size: 1.25rem; font-weight: 700; margin-bottom: 0.5rem;">Direct XGBoost Classifier</h3>
+            <p style="color: var(--text-muted); font-size: 0.92rem; line-height: 1.5;">Serialized multi-class XGBoost model trained directly on historical hydrological data, evaluating probabilities across Low, Medium, and High Risk.</p>
+        </div>
+
+        <div class="stats-card accent-green">
+            <div class="header-icon-badge" style="margin: 0 0 1.2rem; background: rgba(16, 185, 129, 0.15); color: var(--risk-low);">🗺️</div>
+            <h3 style="font-size: 1.25rem; font-weight: 700; margin-bottom: 0.5rem;">Leaflet OSM Spatial Maps</h3>
+            <p style="color: var(--text-muted); font-size: 0.92rem; line-height: 1.5;">Zero-dependency interactive mapping with OpenStreetMap tiles, rendering dynamic color-coded pins and risk radius zones without external API billing.</p>
+        </div>
+
+        <div class="stats-card accent-amber">
+            <div class="header-icon-badge" style="margin: 0 0 1.2rem; background: rgba(245, 158, 11, 0.15); color: var(--risk-med);">🚨</div>
+            <h3 style="font-size: 1.25rem; font-weight: 700; margin-bottom: 0.5rem;">Automated Warning Pipeline</h3>
+            <p style="color: var(--text-muted); font-size: 0.92rem; line-height: 1.5;">Immediate in-app flash alerts and automated SMTP emergency emails dispatched to registered residents and municipal monitoring teams.</p>
+        </div>
+    </div>
+</div>
+
+<!-- Recent Community Feed -->
+{% if recent_assessments %}
+<div class="table-card">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.2rem;">
+        <div>
+            <h3 style="font-size: 1.25rem; font-weight: 700; margin: 0;">Live Community Risk Feed</h3>
+            <p style="font-size: 0.85rem; color: var(--text-muted); margin-top: 2px;">Recently evaluated urban locations</p>
+        </div>
+        <a href="{{ url_for('history') }}" class="btn btn-secondary" style="font-size: 0.82rem; padding: 6px 14px;">
+            View Complete Log &rarr;
+        </a>
+    </div>
+
+    <div class="table-responsive">
+        <table class="modern-table">
+            <thead>
+                <tr>
+                    <th>Location</th>
+                    <th>Risk Classification</th>
+                    <th>Confidence</th>
+                    <th>Timestamp</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for item in recent_assessments %}
+                <tr>
+                    <td><strong>{{ item.location_name }}</strong></td>
+                    <td>
+                        {% if item.risk_level == 'High Risk' %}
+                            <span class="status-badge badge-high">● High Risk</span>
+                        {% elif item.risk_level == 'Medium Risk' %}
+                            <span class="status-badge badge-med">● Medium Risk</span>
+                        {% else %}
+                            <span class="status-badge badge-low">● Low Risk</span>
+                        {% endif %}
+                    </td>
+                    <td><strong style="color: #fff;">{{ "%.1f"|format(item.probability) }}%</strong></td>
+                    <td style="color: var(--text-muted); font-size: 0.85rem;">{{ item.created_at }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endif %}
+{% endblock %}

@@ -1,0 +1,66 @@
+{% extends "base.html" %}
+
+{% block title %}Municipal Admin Portal | HydroAlert FloodGuard{% endblock %}
+{% block breadcrumb %}Municipal Admin Authentication{% endblock %}
+
+{% block content %}
+<div class="form-card" style="border-top: 4px solid var(--accent-pink);">
+    <div class="form-header">
+        <div class="header-icon-badge" style="background: rgba(247, 37, 133, 0.15); color: var(--accent-pink);">
+            🛡️
+        </div>
+        <h2>Municipal Admin Portal</h2>
+        <p>Restricted access for disaster management and municipal surveillance teams</p>
+    </div>
+
+    <form action="{{ url_for('admin_login') }}" method="POST">
+        <div class="form-group">
+            <label for="username">Administrator Username or Email</label>
+            <div class="input-wrapper">
+                <span class="input-icon">👤</span>
+                <input 
+                    type="text" 
+                    id="username" 
+                    name="username" 
+                    class="form-control" 
+                    placeholder="admin" 
+                    required 
+                    autocomplete="username" 
+                    autofocus
+                >
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="password">Security Password</label>
+            <div class="input-wrapper">
+                <span class="input-icon">🔒</span>
+                <input 
+                    type="password" 
+                    id="password" 
+                    name="password" 
+                    class="form-control" 
+                    placeholder="••••••••" 
+                    required 
+                    autocomplete="current-password"
+                >
+            </div>
+        </div>
+
+        <button type="submit" class="btn btn-accent btn-block" style="margin-top: 1.8rem; padding: 1rem;">
+            <span>🛡️ Authenticate Administrator</span>
+        </button>
+    </form>
+
+    <div style="margin-top: 2rem; background: rgba(14, 14, 26, 0.6); padding: 1rem; border-radius: var(--radius-sm); border: 1px dashed var(--card-border); font-size: 0.85rem; color: var(--text-muted); text-align: center;">
+        <span>Default Development Credentials:</span><br/>
+        Username: <strong style="color: #fff;">admin</strong> &bull; Password: <strong style="color: #fff;">Admin@123</strong>
+    </div>
+
+    <div style="margin-top: 1.5rem; text-align: center;">
+        <a href="{{ url_for('login') }}" style="color: var(--primary-blue); text-decoration: none; font-size: 0.88rem; font-weight: 500;">
+            ← Switch to Resident User Login
+        </a>
+    </div>
+</div>
+{% endblock %}

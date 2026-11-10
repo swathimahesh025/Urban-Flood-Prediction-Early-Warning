@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Urban Flood Early Warning System | HydroAlert{% endblock %}</title>
+
+    <!-- Google Fonts: Poppins -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <!-- Main Stylesheet -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    {% block extra_head %}{% endblock %}
+
+    <style>
+        /* ── Auth-Only Full-Screen Layout ─────────────────────────── */
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+        html, body {
+            height: 100%;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        body {
+            min-height: 100vh;
+            background-color: #0e0e1a;
+            background-image:
+                radial-gradient(ellipse 80% 60% at 15% 40%, rgba(67, 97, 238, 0.22) 0%, transparent 65%),
+                radial-gradient(ellipse 60% 50% at 85% 15%, rgba(114, 9, 183, 0.18) 0%, transparent 60%),
+                radial-gradient(ellipse 70% 55% at 70% 85%, rgba(247, 37, 133, 0.14) 0%, transparent 60%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem 1rem;
+        }
+
+        /* Animated star/particle dots in background */
+        body::before {
+            content: '';
+            position: fixed;
+            inset: 0;
+            background-image:
+                radial-gradient(1px 1px at 20% 30%, rgba(255,255,255,0.25) 0%, transparent 100%),
+                radial-gradient(1px 1px at 75% 15%, rgba(255,255,255,0.2) 0%, transparent 100%),
+                radial-gradient(1px 1px at 50% 70%, rgba(255,255,255,0.15) 0%, transparent 100%),
+                radial-gradient(1px 1px at 90% 60%, rgba(255,255,255,0.2) 0%, transparent 100%),
+                radial-gradient(1px 1px at 35% 85%, rgba(255,255,255,0.18) 0%, transparent 100%);
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        /* ── Wrapper ───────────────────────────────────────────────── */
+        .auth-page-wrapper {
+            position: relative;
+            z-index: 1;
+            width: 100%;
+            max-width: 480px;
+        }
+
+        /* ── Brand watermark ───────────────────────────────────────── */
+        .auth-brand {
+            text-align: center;
+            margin-bottom: 1.8rem;
+        }
+        .auth-brand-icon {
+            font-size: 2.6rem;
+            display: block;
+            margin-bottom: 0.5rem;
+            filter: drop-shadow(0 0 18px rgba(67,97,238,0.6));
+        }
+        .auth-brand-name {
+            font-size: 1.4rem;
+            font-weight: 800;
+            letter-spacing: -0.03em;
+            background: linear-gradient(135deg, #4361ee, #f72585);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .auth-brand-tagline {
+            font-size: 0.78rem;
+            color: #64748b;
+            margin-top: 3px;
+            letter-spacing: 0.04em;
+        }
+
+        /* ── Form card override for auth pages ─────────────────────── */
+        .form-card {
+            background: rgba(22, 22, 42, 0.88) !important;
+            border: 1px solid rgba(255,255,255,0.09) !important;
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-radius: 20px !important;
+            padding: 2.2rem !important;
+            box-shadow: 0 24px 60px rgba(0,0,0,0.55), 0 0 0 1px rgba(67,97,238,0.12) !important;
+        }
+
+        /* ── Flash alerts ───────────────────────────────────────────── */
+        .auth-alert-container { margin-bottom: 1rem; }
+
+        /* ── Footer watermark ───────────────────────────────────────── */
+        .auth-footer {
+            text-align: center;
+            margin-top: 1.4rem;
+            font-size: 0.75rem;
+            color: #3a4260;
+            letter-spacing: 0.02em;
+        }
+    </style>
+</head>
+<body>
+    <div class="auth-page-wrapper">
+
+        <!-- Brand Header -->
+        <div class="auth-brand">
+            <span class="auth-brand-icon">🌊</span>
+            <div class="auth-brand-name">Urban FloodGuard</div>
+            <div class="auth-brand-tagline">Karnataka Flood Early Warning System</div>
+        </div>
+
+        <!-- Flash Messages -->
+        <div class="auth-alert-container">
+            {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                    {% for category, message in messages %}
+                        <div class="alert alert-{{ category }}">
+                            <span>{{ message }}</span>
+                            <button onclick="this.parentElement.remove()" style="background:none;border:none;color:inherit;font-size:1.3rem;cursor:pointer;float:right;line-height:1;">&times;</button>
+                        </div>
+                    {% endfor %}
+                {% endif %}
+            {% endwith %}
+        </div>
+
+        <!-- Page Content -->
+        {% block content %}{% endblock %}
+
+        <!-- Footer -->
+        <div class="auth-footer">
+            UrbanFlood Prediction &bull; XGBoost &bull; Karnataka KSNDMC
+        </div>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+    {% block scripts %}{% endblock %}
+</body>
+</html>

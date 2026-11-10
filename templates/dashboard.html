@@ -1,0 +1,82 @@
+{% extends "base.html" %}
+
+{% block title %}Urban Flood Risk Dashboard | HydroAlert Karnataka{% endblock %}
+{% block breadcrumb %}Urban Flood Risk Assessment Dashboard{% endblock %}
+
+{% block content %}
+<!-- Welcome & Quick Action Intro -->
+<div style="margin-bottom: 2.2rem;">
+    <h1 style="font-size: 2.1rem; font-weight: 800; letter-spacing: -0.02em; margin-bottom: 0.4rem;">
+        UrbanFlood Risk Surveillance
+    </h1>
+    <p style="color: var(--text-muted); font-size: 0.95rem;">
+        Real-time telemetry and XGBoost artificial intelligence evaluating flood threat levels across designated Karnataka flood vulnerability zones.
+    </p>
+</div>
+
+<!-- Auto Geolocation Feedback Alert (Hidden by default) -->
+<div id="auto-status" style="display: none; max-width: 800px; margin: 0 auto 2rem;" class="alert"></div>
+
+<!-- Dual Choice Assessment Cards -->
+<div class="choice-grid">
+    <!-- Action Card 1: GPS Auto-Fetch -->
+    <div class="choice-card">
+        <div>
+            <div class="choice-icon-wrap">
+                📡
+            </div>
+            <h3>Auto-Fetch GPS Location</h3>
+            <p>
+                Automatically query your device's browser GPS coordinates. If located within Karnataka flood zones, live weather data is matched and classified.
+            </p>
+        </div>
+        <button id="btn-autolocate" class="btn btn-primary btn-block" style="padding: 1rem;">
+            <span>📡 Auto-Fetch My GPS Location</span>
+        </button>
+    </div>
+
+    <!-- Action Card 2: Manual Location -->
+    <div class="choice-card pink-glow">
+        <div>
+            <div class="choice-icon-wrap pink">
+                🏙️
+            </div>
+            <h3>Manual Location Search</h3>
+            <p>
+                Select or search one of the 7 designated Karnataka flood monitoring regions: Bengaluru Urban, Dakshina Kannada, Udupi, Uttara Kannada, Shivamogga, Chikkamagaluru, or Kodagu.
+            </p>
+        </div>
+        <a href="{{ url_for('custom_location') }}" class="btn btn-accent btn-block" style="padding: 1rem;">
+            <span>🔍 Select Monitored Karnataka Region</span>
+        </a>
+    </div>
+</div>
+
+<!-- "How It Works" 3-Step Visual Progression -->
+<!--<div class="workflow-section">
+    <div class="workflow-title-wrap">
+        <h3>How HydroAlert Predicts Karnataka Flood Risks</h3>
+        <p>Three-stage AI data pipeline from regional coordinates to actionable early warning directives</p>
+    </div>
+
+    <div class="workflow-grid">
+        <div class="workflow-step-card">
+            <div class="step-number-badge">1</div>
+            <h4>Location Boundary Verification</h4>
+            <p>Spatial boundary matching identifies whether the requested coordinates belong to designated Karnataka catchments (e.g., Netravathi, Cauvery, Tunga-Bhadra basins).</p>
+        </div>
+
+        <div class="workflow-step-card">
+            <div class="step-number-badge" style="background: var(--grad-vibrant);">2</div>
+            <h4>Meteorological Streaming</h4>
+            <p>OpenWeatherMap & KSNDMC feeds supply precipitation volume (mm), relative humidity, surface temperature, wind velocity, and atmospheric pressure.</p>
+        </div>
+
+        <div class="workflow-step-card">
+            <div class="step-number-badge" style="background: var(--grad-accent);">3</div>
+            <h4>XGBoost Risk Classification</h4>
+            <p>The pre-trained model computes probability distributions across Low, Medium, and High Risk tiers, activating early warning alerts and danger radiuses.</p>
+        </div>
+    </div>
+</div>-->
+{% endblock %}

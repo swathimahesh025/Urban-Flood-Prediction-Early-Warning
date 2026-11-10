@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Urban Flood Early Warning System | UrbanFlood{% endblock %}</title>
+    
+    <!-- Google Fonts: Poppins (300, 400, 500, 600, 700, 800) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <!-- Leaflet.js CSS (Free OpenStreetMap Layer Engine) -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
+
+    <!-- Modern Stylesheet -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    {% block extra_head %}{% endblock %}
+</head>
+<body>
+    <div class="app-container">
+        <!-- Collapsible Fixed Sidebar -->
+        <aside class="app-sidebar" id="appSidebar">
+            <div class="sidebar-header">
+                <div class="sidebar-logo-icon">🌊</div>
+                <div class="sidebar-brand-text">
+                    Urban
+                    FloodGuard</span>
+                </div>
+            </div>
+
+            <ul class="sidebar-menu">
+                <li class="menu-label">Main Navigation</li>
+                <li>
+                    <a href="{{ url_for('dashboard') }}" class="sidebar-link {% if request.endpoint == 'dashboard' %}active{% endif %}">
+                        <span class="sidebar-link-icon">📊</span>
+                        <span>Dashboard</span>
+                    </a>
+                </li>
+
+                <li class="menu-label">Administration</li>
+                {% if session.get('admin_id') %}
+                    <li>
+                        <a href="{{ url_for('admin_dashboard') }}" class="sidebar-link {% if request.endpoint == 'admin_dashboard' %}active{% endif %}">
+                            <span class="sidebar-link-icon">🛡️</span>
+                            <span>Admin Analytics</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{{ url_for('history') }}" class="sidebar-link {% if request.endpoint == 'history' %}active{% endif %}">
+                            <span class="sidebar-link-icon">📜</span>
+                            <span>History</span>
+                        </a>
+                    </li>
+                {% else %}
+                    <li>
+                        <a href="{{ url_for('admin_login') }}" class="sidebar-link {% if request.endpoint == 'admin_login' %}active{% endif %}">
+                            <span class="sidebar-link-icon">🔐</span>
+                            <span>Admin Portal</span>
+                        </a>
+                    </li>
+                {% endif %}
+
+                <li class="menu-label">Account</li>
+                {% if session.get('user_id') %}
+                    <li>
+                        <a href="{{ url_for('logout') }}" class="sidebar-link">
+                            <span class="sidebar-link-icon">🚪</span>
+                            <span>Sign Out</span>
+                        </a>
+                    </li>
+                {% elif session.get('admin_id') %}
+                    <li>
+                        <a href="{{ url_for('admin_logout') }}" class="sidebar-link">
+                            <span class="sidebar-link-icon">🚪</span>
+                            <span>Admin Logout</span>
+                        </a>
+                    </li>
+                {% else %}
+                    <!--<li>
+                        <a href="{{ url_for('login') }}" class="sidebar-link {% if request.endpoint == 'login' %}active{% endif %}">
+                            <span class="sidebar-link-icon">🔑</span>
+                            <span>Resident Sign In</span>
+                        </a>
+                    </li>-->
+                    <!--<li>
+                        <a href="{{ url_for('signup') }}" class="sidebar-link {% if request.endpoint == 'signup' %}active{% endif %}">
+                            <span class="sidebar-link-icon">📝</span>
+                            <span>Create Account</span>
+                        </a>
+                    </li>-->
+                {% endif %}
+            </ul>
+
+            <div class="sidebar-footer">
+                <div style="font-size: 0.75rem; color: var(--text-dim); text-align: center;">
+                    UrbanFlood Prediction &bull; XGBoost <br/>
+                    OpenWeather & Leaflet OSM
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main Body Wrapper -->
+        <div class="app-main">
+            <!-- Top App Header -->
+            <header class="app-header">
+                <div class="header-left">
+                    <button class="header-toggle-btn" id="sidebarToggle" aria-label="Toggle Navigation">
+                        ☰
+                    </button>
+                    <div class="header-breadcrumb">
+                        {% block breadcrumb %}Urban Flood Early Warning Dashboard{% endblock %}
+                    </div>
+                </div>
+
+                <div class="header-right">
+                    <!-- Live Emergency Alerts Center Button -->
+                    <button type="button" class="btn btn-secondary" onclick="openAlertsModal()" style="padding: 0.45rem 1rem; font-size: 0.85rem; border-radius: 999px; display: inline-flex; align-items: center; gap: 6px; border: 1px solid rgba(239, 68, 68, 0.4); background: rgba(239, 68, 68, 0.12); color: #ff6b8b;">
+                        <span style="display:inline-block; animation: pulse 1.5s infinite;">🚨</span>
+                        <span>Emergency Alerts</span>
+                    </button>
+
+                    {% if session.get('user_id') %}
+                        <a href="{{ url_for('dashboard') }}" class="user-profile-badge">
+                            <div class="user-avatar-circle">
+                                {{ session.get('user_name', 'U')[:1]|upper }}
+                            </div>
+                            <span>{{ session.get('user_name') }}</span>
+                        </a>
+                    {% elif session.get('admin_id') %}
+                        <a href="{{ url_for('admin_dashboard') }}" class="user-profile-badge" style="border-color: rgba(247, 37, 133, 0.4);">
+                            <div class="user-avatar-circle" style="background: var(--grad-accent);">
+                                A
+                            </div>
+                            <span>Administrator</span>
+                        </a>
+                    {% else %}
+                        <a href="{{ url_for('login') }}" class="btn btn-secondary" style="padding: 0.45rem 1.1rem; font-size: 0.85rem;">
+                            Sign In
+                        </a>
+                        <a href="{{ url_for('signup') }}" class="btn btn-primary" style="padding: 0.45rem 1.1rem; font-size: 0.85rem;">
+                            Register
+                        </a>
+                    {% endif %}
+                </div>
+            </header>
+
+            <!-- Flash Alerts -->
+            <div class="alert-container">
+                {% with messages = get_flashed_messages(with_categories=true) %}
+                    {% if messages %}
+                        {% for category, message in messages %}
+                            <div class="alert alert-{{ category }}">
+                                <span>{{ message }}</span>
+                                <button onclick="this.parentElement.remove()" style="background: none; border: none; color: inherit; font-size: 1.3rem; cursor: pointer; float: right; line-height: 1;">&times;</button>
+                            </div>
+                        {% endfor %}
+                    {% endif %}
+                {% endwith %}
+            </div>
+
+            <!-- Page Specific Content -->
+            <main class="page-container">
+                {% block content %}{% endblock %}
+            </main>
+        </div>
+    </div>
+
+    <!-- Emergency Alerts Modal Overlay -->
+    <div id="alertsModal" class="modal-overlay">
+        <div class="modal-container" style="max-width: 680px;">
+            <div class="modal-header" style="border-bottom: 1px solid var(--card-border); padding-bottom: 1rem; display: flex; justify-content: space-between; align-items: center;">
+                <div style="display: flex; align-items: center; gap: 10px;">
+                    <span style="font-size: 1.6rem;">🚨</span>
+                    <div>
+                        <h3 style="margin: 0; font-size: 1.25rem; font-weight: 700; color: #ffffff;">Live Disaster Warnings & Alerts</h3>
+                        <p style="margin: 0; font-size: 0.82rem; color: var(--text-muted);">Real-time early warning broadcasts dispatched across Karnataka surveillance zones</p>
+                    </div>
+                </div>
+                <button type="button" onclick="closeModal('alertsModal')" style="background: none; border: none; font-size: 1.5rem; color: var(--text-muted); cursor: pointer;">&times;</button>
+            </div>
+            <div id="alertsModalContent" style="padding: 1.2rem 0; max-height: 420px; overflow-y: auto;">
+                <div style="text-align: center; color: var(--text-muted); padding: 2rem;">Loading latest emergency alerts...</div>
+            </div>
+            <div style="border-top: 1px solid var(--card-border); padding-top: 1rem; display: flex; justify-content: space-between; align-items: center;">
+                <span style="font-size: 0.8rem; color: var(--text-dim);">HydroAlert &bull; Karnataka Disaster Management Early Warning</span>
+                <button type="button" class="btn btn-secondary" onclick="closeModal('alertsModal')">Close</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Leaflet JS -->
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+    <!-- Application JS -->
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+    {% block scripts %}{% endblock %}
+</body>
+</html>

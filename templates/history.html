@@ -1,0 +1,88 @@
+{% extends "base.html" %}
+
+{% block title %}Assessment History Log | HydroAlert FloodGuard{% endblock %}
+{% block breadcrumb %}Assessment History Audit Trail{% endblock %}
+
+{% block content %}
+<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem; flex-wrap: wrap; gap: 1rem;">
+    <div>
+        <h1 style="font-size: 2rem; font-weight: 800; letter-spacing: -0.02em; margin-bottom: 0.3rem;">
+            Assessment History Log
+        </h1>
+        <p style="color: var(--text-muted); font-size: 0.95rem;">
+            Chronological audit trail of past meteorological queries and machine learning risk evaluations.
+        </p>
+    </div>
+    <div>
+        <a href="{{ url_for('dashboard') }}" class="btn btn-primary">
+            <span>+ New Assessment</span>
+        </a>
+    </div>
+</div>
+
+<div class="table-card">
+    {% if predictions and predictions|length > 0 %}
+    <div class="table-responsive">
+        <table class="modern-table">
+            <thead>
+                <tr>
+                    <th>Date & Time</th>
+                    <th>Location</th>
+                    <th>Coordinates</th>
+                    <th>Rainfall</th>
+                    <th>Humidity</th>
+                    <th>Risk Classification</th>
+                    <th>Confidence</th>
+                    <th>Emergency Alert</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for p in predictions %}
+                <tr>
+                    <td style="color: var(--text-muted); font-size: 0.86rem; white-space: nowrap;">{{ p.created_at }}</td>
+                    <td><strong>{{ p.location_name }}</strong></td>
+                    <td style="color: #94a3b8; font-size: 0.85rem; font-family: monospace;">{{ "%.3f"|format(p.latitude) }}, {{ "%.3f"|format(p.longitude) }}</td>
+                    <td><strong>{{ p.rainfall }} mm</strong></td>
+                    <td>{{ p.humidity }}%</td>
+                    <td>
+                        {% if p.risk_level == 'High Risk' %}
+                            <span class="status-badge badge-high">● High Risk</span>
+                        {% elif p.risk_level == 'Medium Risk' %}
+                            <span class="status-badge badge-med">● Medium Risk</span>
+                        {% else %}
+                            <span class="status-badge badge-low">● Low Risk</span>
+                        {% endif %}
+                    </td>
+                    <td><strong style="color: #fff;">{{ "%.1f"|format(p.probability) }}%</strong></td>
+                    <td>
+                        {% if p.alert_triggered %}
+                            <span style="color: var(--accent-pink); font-weight: 700; font-size: 0.85rem;">🚨 Dispatched</span>
+                        {% else %}
+                            <span style="color: var(--text-dim); font-size: 0.85rem;">Normal</span>
+                        {% endif %}
+                    </td>
+                    <td>
+                        <a href="{{ url_for('result_view', prediction_id=p.id) }}" class="btn btn-secondary" style="padding: 6px 14px; font-size: 0.82rem; border-radius: var(--radius-sm); text-decoration: none;">
+                            View Report &rarr;
+                        </a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% else %}
+    <div style="text-align: center; padding: 4.5rem 2rem;">
+        <div style="font-size: 3.5rem; margin-bottom: 1rem;">📁</div>
+        <h3 style="font-size: 1.4rem; font-weight: 700;">No Past Assessments Recorded</h3>
+        <p style="color: var(--text-muted); margin: 0.5rem auto 1.8rem; max-width: 480px; font-size: 0.95rem;">
+            You have not recorded any flood risk assessments yet. Run your first assessment using GPS auto-fetch or manual city search.
+        </p>
+        <a href="{{ url_for('dashboard') }}" class="btn btn-primary" style="padding: 0.9rem 2rem;">
+            <span>🚀 Run First Flood Assessment</span>
+        </a>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

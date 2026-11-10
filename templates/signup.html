@@ -1,0 +1,126 @@
+{% extends "auth_base.html" %}
+
+{% block title %}Create Account | HydroAlert FloodGuard{% endblock %}
+
+{% block content %}
+<div class="form-card" style="border-top: 4px solid #f72585;">
+    <div class="form-header" style="text-align: center; margin-bottom: 1.8rem;">
+        <div class="header-icon-badge" style="background: rgba(247, 37, 133, 0.15); color: #f72585; margin: 0 auto 0.9rem; width: 58px; height: 58px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.6rem;">
+            📝
+        </div>
+        <h2 style="font-size: 1.55rem; font-weight: 800; letter-spacing: -0.025em; color: #f1f5f9; margin-bottom: 0.3rem;">Create Resident Account</h2>
+        <p style="font-size: 0.85rem; color: #64748b;">Register to monitor regional risks and receive early flood warnings</p>
+    </div>
+
+    <form action="{{ url_for('signup') }}" method="POST">
+
+        <!-- Full Name -->
+        <div class="form-group">
+            <label for="name" style="font-size: 0.85rem; font-weight: 600; color: #94a3b8; margin-bottom: 0.5rem; display: block;">Full Name</label>
+            <div class="input-wrapper">
+                <span class="input-icon">👤</span>
+                <input
+                    type="text"
+                    id="name"
+                    name="name"
+                    class="form-control"
+                    placeholder="e.g. Rakshita Lokapur"
+                    required
+                    autocomplete="name"
+                    autofocus
+                >
+            </div>
+        </div>
+
+        <!-- Email Address -->
+        <div class="form-group" style="margin-top: 1rem;">
+            <label for="email" style="font-size: 0.85rem; font-weight: 600; color: #94a3b8; margin-bottom: 0.5rem; display: block;">Email Address</label>
+            <div class="input-wrapper">
+                <span class="input-icon">✉️</span>
+                <input
+                    type="email"
+                    id="email"
+                    name="email"
+                    class="form-control"
+                    placeholder="yourname@example.com"
+                    required
+                    autocomplete="email"
+                >
+            </div>
+        </div>
+
+        <!-- Create Password -->
+        <div class="form-group" style="margin-top: 1rem;">
+            <label for="password" style="font-size: 0.85rem; font-weight: 600; color: #94a3b8; margin-bottom: 0.5rem; display: block;">Create Password</label>
+            <div class="input-wrapper">
+                <span class="input-icon">🔒</span>
+                <input
+                    type="password"
+                    id="password"
+                    name="password"
+                    class="form-control"
+                    placeholder="Minimum 6 characters"
+                    required
+                    minlength="6"
+                    autocomplete="new-password"
+                >
+            </div>
+            <div style="font-size: 0.75rem; color: #3a4260; margin-top: 4px;">Must be at least 6 characters long.</div>
+        </div>
+
+        <!-- Confirm Password -->
+        <div class="form-group" style="margin-top: 1rem;">
+            <label for="confirm_password" style="font-size: 0.85rem; font-weight: 600; color: #94a3b8; margin-bottom: 0.5rem; display: block;">Confirm Password</label>
+            <div class="input-wrapper">
+                <span class="input-icon">🛡️</span>
+                <input
+                    type="password"
+                    id="confirm_password"
+                    name="confirm_password"
+                    class="form-control"
+                    placeholder="Re-enter your password"
+                    required
+                    minlength="6"
+                    autocomplete="new-password"
+                >
+            </div>
+        </div>
+
+        <!-- Submit: goes to dashboard on success -->
+        <button type="submit" id="btnRegister" class="btn btn-accent btn-block" style="margin-top: 1.8rem; padding: 0.95rem; font-size: 0.95rem; font-weight: 700; border-radius: 12px; width: 100%;">
+            ✨ Complete Registration &rarr; Dashboard
+        </button>
+    </form>
+
+    <div style="margin-top: 1.4rem; text-align: center; font-size: 0.88rem; color: #64748b; border-top: 1px solid rgba(255,255,255,0.07); padding-top: 1.3rem;">
+        Already have an account?
+        <a href="{{ url_for('login') }}" style="color: #4361ee; text-decoration: none; font-weight: 700; margin-left: 4px;">Sign in here →</a>
+    </div>
+</div>
+
+{% block scripts %}
+<script>
+    // Client-side password match validation before submit
+    document.querySelector("form").addEventListener("submit", function(e) {
+        const pw  = document.getElementById("password").value;
+        const cpw = document.getElementById("confirm_password").value;
+        if (pw !== cpw) {
+            e.preventDefault();
+            const cpwInput = document.getElementById("confirm_password");
+            cpwInput.style.borderColor = "#f72585";
+            cpwInput.style.boxShadow = "0 0 0 3px rgba(247,37,133,0.2)";
+            cpwInput.setCustomValidity("Passwords do not match.");
+            cpwInput.reportValidity();
+        } else {
+            document.getElementById("confirm_password").setCustomValidity("");
+        }
+    });
+    // Reset custom validity on typing
+    document.getElementById("confirm_password").addEventListener("input", function() {
+        this.setCustomValidity("");
+        this.style.borderColor = "";
+        this.style.boxShadow = "";
+    });
+</script>
+{% endblock %}
+{% endblock %}

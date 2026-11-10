@@ -1,0 +1,51 @@
+{
+  "bengaluru_urban": {
+    "event_key": "Bengaluru Urban|2026-10-29T12:00|Low Risk",
+    "risk_level": "Low Risk",
+    "forecast_time": "2026-10-29T12:00",
+    "last_sent_at": "2026-10-29T11:10:56.293102",
+    "sent_count": 7
+  },
+  "dakshina_kannada": {
+    "event_key": "Dakshina Kannada (Mangaluru Urban)|2026-10-29T12:00|Low Risk",
+    "risk_level": "Low Risk",
+    "forecast_time": "2026-10-29T12:00",
+    "last_sent_at": "2026-10-29T11:11:29.633873",
+    "sent_count": 7
+  },
+  "udupi": {
+    "event_key": "Udupi Urban|2026-10-29T12:00|Low Risk",
+    "risk_level": "Low Risk",
+    "forecast_time": "2026-10-29T12:00",
+    "last_sent_at": "2026-10-29T11:12:06.852944",
+    "sent_count": 7
+  },
+  "uttara_kannada": {
+    "event_key": "Uttara Kannada (Karwar & Sirsi)|2026-10-29T12:00|Low Risk",
+    "risk_level": "Low Risk",
+    "forecast_time": "2026-10-29T12:00",
+    "last_sent_at": "2026-10-29T11:12:41.413683",
+    "sent_count": 7
+  },
+  "shivamogga": {
+    "event_key": "Shivamogga|2026-10-29T12:00|Low Risk",
+    "risk_level": "Low Risk",
+    "forecast_time": "2026-10-29T12:00",
+    "last_sent_at": "2026-10-29T11:13:16.364653",
+    "sent_count": 7
+  },
+  "chikkamagaluru": {
+    "event_key": "Chikkamagaluru|2026-10-29T12:00|Low Risk",
+    "risk_level": "Low Risk",
+    "forecast_time": "2026-10-29T12:00",
+    "last_sent_at": "2026-10-29T11:13:53.316636",
+    "sent_count": 7
+  },
+  "kodagu": {
+    "event_key": "Kodagu (Madikeri)|2026-10-29T12:00|Low Risk",
+    "risk_level": "Low Risk",
+    "forecast_time": "2026-10-29T12:00",
+    "last_sent_at": "2026-10-29T11:14:33.538986",
+    "sent_count": 7
+  }
+}
