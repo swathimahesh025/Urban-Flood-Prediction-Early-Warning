@@ -1,0 +1,1441 @@
+/* ==========================================================
+   URBAN FLOODGUARD — PREMIUM DISASTER MANAGEMENT UI
+   Theme: Deep Navy / Ocean Blue / Aqua
+   ========================================================== */
+
+:root {
+    --navy-950: #041426;
+    --navy-900: #071B33;
+    --navy-800: #0B2947;
+    --ocean: #087EBC;
+    --ocean-light: #20A4DF;
+    --aqua: #16C6C2;
+    --ice: #EAF6FF;
+    --white: #FFFFFF;
+
+    --bg-main: #071B33;
+    --bg-card: rgba(13, 43, 72, 0.88);
+    --bg-card-hover: rgba(17, 56, 88, 0.96);
+
+    --text-main: #F3F9FF;
+    --text-muted: #A5BDD1;
+    --text-dim: #7693AD;
+
+    --border: rgba(144, 202, 235, 0.15);
+
+    --low: #24C78E;
+    --medium: #F5B942;
+    --high: #FF5E6C;
+
+    --shadow:
+        0 15px 40px rgba(0, 0, 0, 0.22);
+
+    --shadow-blue:
+        0 12px 35px rgba(8, 126, 188, 0.23);
+
+    --radius-sm: 12px;
+    --radius-md: 18px;
+    --radius-lg: 26px;
+
+    --sidebar-width: 260px;
+}
+
+/* ---------------- GLOBAL ---------------- */
+
+* {
+    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    font-family: 'Poppins', sans-serif !important;
+    color: var(--text-main) !important;
+    background:
+        radial-gradient(
+            circle at 85% 5%,
+            rgba(8,126,188,.15),
+            transparent 30%
+        ),
+        linear-gradient(
+            135deg,
+            #041426,
+            #071B33 55%,
+            #0A223C
+        ) !important;
+    background-attachment: fixed !important;
+    overflow-x: hidden;
+}
+
+::selection {
+    background: var(--aqua);
+    color: var(--navy-950);
+}
+
+a {
+    transition: all .25s ease;
+}
+
+button,
+input,
+select,
+textarea {
+    font-family: inherit;
+}
+
+/* ---------------- APPLICATION SHELL ---------------- */
+
+.app-container {
+    width: 100%;
+    min-height: 100vh;
+}
+
+/* ---------------- SIDEBAR ---------------- */
+
+.app-sidebar {
+    width: var(--sidebar-width) !important;
+
+    background:
+        linear-gradient(
+            180deg,
+            rgba(5, 25, 45, .98),
+            rgba(4, 20, 38, .99)
+        ) !important;
+
+    border-right: 1px solid var(--border) !important;
+
+    box-shadow:
+        8px 0 35px rgba(0, 0, 0, .17) !important;
+
+    backdrop-filter: blur(18px);
+}
+
+.sidebar-header {
+    min-height: 90px;
+    padding: 1.4rem !important;
+    border-bottom: 1px solid var(--border) !important;
+}
+
+.sidebar-logo-icon {
+    background:
+        linear-gradient(
+            135deg,
+            var(--ocean),
+            var(--aqua)
+        ) !important;
+
+    border-radius: 15px !important;
+
+    box-shadow:
+        0 8px 25px rgba(8, 126, 188, .35) !important;
+}
+
+.sidebar-brand-text {
+    font-size: 1.2rem !important;
+    font-weight: 800 !important;
+    color: var(--white) !important;
+}
+
+.sidebar-brand-text span {
+    color: var(--aqua) !important;
+}
+
+.sidebar-menu {
+    padding: 1.4rem .9rem !important;
+}
+
+.menu-label {
+    color: #7193AF !important;
+    font-size: .68rem !important;
+    letter-spacing: .13em !important;
+}
+
+.sidebar-link {
+    padding: .9rem 1rem !important;
+    border-radius: 12px !important;
+
+    color: #A7BED2 !important;
+
+    font-size: .88rem !important;
+    font-weight: 500 !important;
+}
+
+.sidebar-link:hover {
+    background: rgba(8,126,188,.16) !important;
+    color: white !important;
+    transform: translateX(4px);
+}
+
+.sidebar-link.active {
+    background:
+        linear-gradient(
+            120deg,
+            #087EBC,
+            #07518D
+        ) !important;
+
+    color: white !important;
+
+    box-shadow:
+        0 8px 22px rgba(8,126,188,.25) !important;
+}
+
+.sidebar-link-icon {
+    font-size: 1.15rem !important;
+}
+
+.sidebar-footer {
+    border-top: 1px solid var(--border) !important;
+}
+
+/* ---------------- TOP NAVIGATION ---------------- */
+
+.app-main {
+    background: transparent !important;
+}
+
+.app-header {
+    height: 76px !important;
+
+    padding: 0 2rem !important;
+
+    background:
+        rgba(5, 25, 45, .84) !important;
+
+    backdrop-filter: blur(20px);
+
+    border-bottom: 1px solid var(--border) !important;
+
+    box-shadow:
+        0 5px 25px rgba(0,0,0,.12);
+}
+
+.header-breadcrumb {
+    color: #E7F5FF !important;
+    font-size: .92rem !important;
+    font-weight: 700 !important;
+}
+
+.user-profile-badge {
+    border: 1px solid var(--border) !important;
+    background: rgba(255,255,255,.045) !important;
+    border-radius: 30px !important;
+    padding: .4rem .8rem !important;
+}
+
+.user-avatar-circle {
+    background:
+        linear-gradient(
+            135deg,
+            var(--ocean),
+            var(--aqua)
+        ) !important;
+}
+
+/* ---------------- PAGE CONTENT ---------------- */
+
+.page-container {
+    width: 100%;
+    max-width: 1700px;
+
+    margin: 0 auto;
+
+    padding: 2.2rem 2.5rem !important;
+
+    animation: pageEnter .55s ease both;
+}
+
+@keyframes pageEnter {
+    from {
+        opacity: 0;
+        transform: translateY(12px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.page-container h1 {
+    color: var(--white);
+    letter-spacing: -.035em;
+}
+
+.page-container p {
+    line-height: 1.7;
+}
+
+/* ---------------- BUTTONS ---------------- */
+
+.btn {
+    border: 1px solid transparent !important;
+
+    border-radius: 12px !important;
+
+    padding: .78rem 1.25rem !important;
+
+    font-weight: 700 !important;
+
+    font-size: .86rem !important;
+
+    transition:
+        transform .25s ease,
+        box-shadow .25s ease,
+        background .25s ease !important;
+}
+
+.btn:hover {
+    transform: translateY(-3px);
+
+    box-shadow:
+        0 9px 25px rgba(0,0,0,.2);
+}
+
+.btn-primary {
+    background:
+        linear-gradient(
+            135deg,
+            #087EBC,
+            #0757A0
+        ) !important;
+
+    color: white !important;
+
+    box-shadow:
+        0 8px 22px rgba(8,126,188,.24);
+}
+
+.btn-primary:hover {
+    background:
+        linear-gradient(
+            135deg,
+            #159DD9,
+            #087EBC
+        ) !important;
+}
+
+.btn-accent {
+    background:
+        linear-gradient(
+            135deg,
+            #16C6C2,
+            #087EBC
+        ) !important;
+
+    color: #041426 !important;
+
+    box-shadow:
+        0 8px 22px rgba(22,198,194,.2);
+}
+
+.btn-accent:hover {
+    background:
+        linear-gradient(
+            135deg,
+            #48E0D9,
+            #16AFC2
+        ) !important;
+}
+
+.btn-secondary {
+    background: rgba(255,255,255,.055) !important;
+
+    color: #EAF6FF !important;
+
+    border-color: var(--border) !important;
+}
+
+.btn-secondary:hover {
+    background: rgba(8,126,188,.18) !important;
+}
+
+.btn-danger {
+    background:
+        linear-gradient(
+            135deg,
+            #F45B69,
+            #D93650
+        ) !important;
+
+    color: white !important;
+}
+
+/* ---------------- CARDS ---------------- */
+
+.table-card,
+.form-card,
+.metric-card,
+.choice-card,
+.stats-card,
+.workflow-step-card {
+    background:
+        linear-gradient(
+            145deg,
+            rgba(15, 48, 78, .93),
+            rgba(8, 31, 55, .96)
+        ) !important;
+
+    border: 1px solid var(--border) !important;
+
+    border-radius: var(--radius-lg) !important;
+
+    box-shadow: var(--shadow) !important;
+
+    backdrop-filter: blur(16px);
+
+    transition:
+        transform .3s ease,
+        border-color .3s ease,
+        box-shadow .3s ease;
+}
+
+.table-card,
+.form-card {
+    padding: 1.6rem !important;
+}
+
+.table-card:hover,
+.stats-card:hover,
+.metric-card:hover,
+.workflow-step-card:hover {
+    border-color:
+        rgba(22,198,194,.35) !important;
+
+    box-shadow:
+        0 18px 40px rgba(0,0,0,.27),
+        0 0 25px rgba(8,126,188,.08) !important;
+}
+
+/* ---------------- DASHBOARD INTRO ---------------- */
+
+.page-container > div:first-child h1 {
+    font-size: clamp(1.8rem, 3vw, 2.5rem);
+}
+
+.choice-grid {
+    display: grid !important;
+
+    grid-template-columns:
+        repeat(2, minmax(0, 1fr));
+
+    gap: 1.6rem !important;
+
+    margin-top: 2rem;
+}
+
+.choice-card {
+    position: relative;
+
+    overflow: hidden;
+
+    min-height: 300px;
+
+    padding: 2rem !important;
+
+    display: flex;
+
+    flex-direction: column;
+
+    justify-content: space-between;
+
+    isolation: isolate;
+}
+
+.choice-card::before {
+    content: "";
+
+    position: absolute;
+
+    inset: 0;
+
+    z-index: -2;
+
+    opacity: .23;
+
+    background-size: cover;
+
+    background-position: center;
+
+    transition: transform .6s ease;
+}
+
+.choice-card:first-child::before {
+    background-image:
+        url("https://images.unsplash.com/photo-1519692933481-e162a57d6721?auto=format&fit=crop&w=1200&q=85");
+}
+
+.choice-card:nth-child(2)::before {
+    background-image:
+        url("https://images.unsplash.com/photo-1518837695005-2083093ee35b?auto=format&fit=crop&w=1200&q=85");
+}
+
+.choice-card::after {
+    content: "";
+
+    position: absolute;
+
+    inset: 0;
+
+    z-index: -1;
+
+    background:
+        linear-gradient(
+            135deg,
+            rgba(4,20,38,.97),
+            rgba(7,46,76,.75)
+        );
+}
+
+.choice-card:hover::before {
+    transform: scale(1.08);
+}
+
+.choice-card h3 {
+    color: white !important;
+
+    font-size: 1.35rem !important;
+
+    margin: 1rem 0 .7rem !important;
+}
+
+.choice-card p {
+    color: #C0D5E6 !important;
+
+    line-height: 1.8 !important;
+}
+
+.choice-icon-wrap {
+    background: rgba(8,126,188,.22) !important;
+
+    border: 1px solid rgba(22,198,194,.3);
+
+    color: var(--aqua) !important;
+
+    border-radius: 16px !important;
+}
+
+.choice-icon-wrap.pink {
+    background: rgba(22,198,194,.13) !important;
+
+    color: var(--aqua) !important;
+}
+
+/* ---------------- ADMIN STATISTICS ---------------- */
+
+.stats-grid {
+    gap: 1.25rem !important;
+}
+
+.stats-card {
+    padding: 1.55rem !important;
+
+    position: relative;
+
+    overflow: hidden;
+}
+
+.stat-label {
+    color: #A9C3D7 !important;
+
+    font-weight: 600 !important;
+
+    font-size: .82rem !important;
+}
+
+.stat-number {
+    color: white !important;
+
+    font-size: 2.1rem !important;
+
+    font-weight: 800 !important;
+}
+
+.stat-subtext {
+    color: #789AB5 !important;
+}
+
+.stat-bg-icon {
+    opacity: .13 !important;
+    color: var(--aqua) !important;
+}
+
+/* ---------------- FORMS ---------------- */
+
+.form-card {
+    max-width: 720px;
+
+    margin: 0 auto;
+}
+
+.form-header h2 {
+    color: white !important;
+
+    font-weight: 800 !important;
+}
+
+.form-header p {
+    color: var(--text-muted) !important;
+}
+
+.form-group label {
+    color: #D8EAF7 !important;
+
+    font-weight: 600 !important;
+}
+
+.input-wrapper {
+    position: relative;
+}
+
+.form-control {
+    background:
+        rgba(3, 20, 38, .7) !important;
+
+    color: white !important;
+
+    border: 1px solid rgba(140,190,220,.2) !important;
+
+    border-radius: 12px !important;
+
+    padding: .9rem 1rem !important;
+
+    min-height: 48px;
+
+    transition: all .25s ease !important;
+}
+
+.form-control::placeholder {
+    color: #7693AD !important;
+}
+
+.form-control:focus {
+    border-color: var(--aqua) !important;
+
+    box-shadow:
+        0 0 0 4px rgba(22,198,194,.12) !important;
+
+    outline: none;
+}
+
+.input-icon {
+    color: var(--aqua) !important;
+}
+
+.field-hint {
+    color: var(--text-muted) !important;
+}
+
+/* ---------------- TABLES ---------------- */
+
+.table-responsive {
+    overflow-x: auto;
+
+    border-radius: 14px;
+}
+
+.modern-table {
+    width: 100%;
+
+    border-collapse: separate !important;
+
+    border-spacing: 0;
+
+    min-width: 850px;
+}
+
+.modern-table thead th {
+    background:
+        linear-gradient(
+            135deg,
+            #0D426B,
+            #0B3154
+        ) !important;
+
+    color: #EAF6FF !important;
+
+    font-size: .74rem !important;
+
+    font-weight: 800 !important;
+
+    text-transform: uppercase;
+
+    letter-spacing: .045em;
+
+    padding: 1rem !important;
+
+    border-bottom: 1px solid var(--border) !important;
+}
+
+.modern-table tbody td {
+    padding: 1rem !important;
+
+    color: #C4D8E8 !important;
+
+    border-bottom: 1px solid rgba(144,202,235,.09) !important;
+
+    font-size: .84rem;
+}
+
+.modern-table tbody tr {
+    background: rgba(9,36,62,.55);
+
+    transition: background .2s ease;
+}
+
+.modern-table tbody tr:nth-child(even) {
+    background: rgba(14,47,76,.6);
+}
+
+.modern-table tbody tr:hover {
+    background: rgba(8,126,188,.16);
+}
+
+.modern-table strong {
+    color: white;
+}
+
+/* ---------------- RISK BADGES ---------------- */
+
+.status-badge {
+    border-radius: 30px !important;
+
+    padding: .42rem .8rem !important;
+
+    font-size: .73rem !important;
+
+    font-weight: 800 !important;
+
+    white-space: nowrap;
+}
+
+.badge-low {
+    color: #55E5AE !important;
+
+    background: rgba(36,199,142,.12) !important;
+
+    border: 1px solid rgba(36,199,142,.35) !important;
+}
+
+.badge-med {
+    color: #FFD16A !important;
+
+    background: rgba(245,185,66,.12) !important;
+
+    border: 1px solid rgba(245,185,66,.35) !important;
+}
+
+.badge-high {
+    color: #FF8290 !important;
+
+    background: rgba(255,94,108,.13) !important;
+
+    border: 1px solid rgba(255,94,108,.35) !important;
+}
+
+/* ---------------- METEOROLOGICAL METRICS ---------------- */
+
+.metrics-grid {
+    display: grid;
+
+    grid-template-columns:
+        repeat(auto-fit, minmax(180px, 1fr));
+
+    gap: 1.2rem !important;
+
+    margin: 1.8rem 0;
+}
+
+.metric-card {
+    padding: 1.4rem !important;
+}
+
+.metric-icon {
+    font-size: 1.7rem !important;
+
+    margin-bottom: .7rem;
+}
+
+.metric-label {
+    color: #9DB9CE !important;
+
+    font-size: .8rem !important;
+
+    font-weight: 600 !important;
+}
+
+.metric-val {
+    color: white !important;
+
+    font-size: 1.6rem !important;
+
+    font-weight: 800 !important;
+}
+
+/* ---------------- MAP ---------------- */
+
+#map,
+#admin-map {
+    border: 1px solid var(--border);
+
+    border-radius: 18px;
+
+    overflow: hidden;
+
+    min-height: 360px;
+
+    box-shadow: var(--shadow);
+}
+
+.leaflet-container {
+    font-family: 'Poppins', sans-serif !important;
+}
+
+/* ---------------- ALERTS ---------------- */
+
+.alert {
+    border-radius: 12px !important;
+
+    padding: 1rem 1.2rem !important;
+
+    backdrop-filter: blur(12px);
+}
+
+.alert-success {
+    background: rgba(36,199,142,.12) !important;
+
+    border: 1px solid rgba(36,199,142,.35) !important;
+}
+
+.alert-danger {
+    background: rgba(255,94,108,.12) !important;
+
+    border: 1px solid rgba(255,94,108,.35) !important;
+}
+
+.alert-warning {
+    background: rgba(245,185,66,.12) !important;
+
+    border: 1px solid rgba(245,185,66,.35) !important;
+}
+
+.alert-info {
+    background: rgba(8,126,188,.15) !important;
+
+    border: 1px solid rgba(8,126,188,.35) !important;
+}
+
+/* ---------------- MODAL ---------------- */
+
+.modal-overlay {
+    background: rgba(1,12,25,.8) !important;
+
+    backdrop-filter: blur(9px);
+}
+
+.modal-container {
+    background: #0B2947 !important;
+
+    border: 1px solid var(--border) !important;
+
+    border-radius: 22px !important;
+
+    box-shadow: var(--shadow) !important;
+}
+
+/* ---------------- WORKFLOW ---------------- */
+
+.workflow-step-card {
+    padding: 1.5rem !important;
+}
+
+.workflow-step-card h4 {
+    color: white !important;
+}
+
+.workflow-step-card p {
+    color: var(--text-muted) !important;
+}
+
+/* ---------------- AUTH PAGES ---------------- */
+
+.auth-page-wrapper {
+    width: 100% !important;
+
+    max-width: 100% !important;
+
+    min-height: 100vh;
+
+    display: grid;
+
+    grid-template-columns: minmax(0, 1.05fr) minmax(400px, .95fr);
+
+    align-items: stretch;
+
+    gap: 0 !important;
+}
+
+.auth-visual {
+    position: relative;
+
+    min-height: 100vh;
+
+    display: flex;
+
+    flex-direction: column;
+
+    justify-content: space-between;
+
+    padding: clamp(2rem, 5vw, 5rem);
+
+    overflow: hidden;
+
+    background:
+        linear-gradient(
+            135deg,
+            rgba(3,20,38,.8),
+            rgba(4,37,64,.5)
+        ),
+        url("https://images.unsplash.com/photo-1534274988757-a28bf1a57c17?auto=format&fit=crop&w=1800&q=90")
+        center / cover no-repeat,
+        linear-gradient(135deg,#071B33,#087EBC);
+}
+
+.auth-visual::after {
+    content: "";
+
+    position: absolute;
+
+    inset: 0;
+
+    background:
+        linear-gradient(
+            0deg,
+            rgba(4,20,38,.94),
+            transparent 70%
+        );
+
+    pointer-events: none;
+}
+
+.auth-visual > * {
+    position: relative;
+
+    z-index: 1;
+}
+
+.auth-visual-brand {
+    font-size: 1.25rem;
+
+    font-weight: 800;
+
+    color: white;
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 12px;
+}
+
+.auth-visual-logo {
+    width: 48px;
+
+    height: 48px;
+
+    border-radius: 14px;
+
+    background: linear-gradient(135deg,var(--ocean),var(--aqua));
+
+    display: grid;
+
+    place-items: center;
+
+    font-size: 1.5rem;
+}
+
+.auth-visual-copy {
+    max-width: 620px;
+
+    margin: auto 0;
+}
+
+.auth-visual-copy h1 {
+    font-size: clamp(2.4rem, 4.5vw, 4.5rem);
+
+    line-height: 1.1;
+
+    font-weight: 800;
+
+    letter-spacing: -.05em;
+
+    color: white;
+
+    margin-bottom: 1.3rem;
+}
+
+.auth-visual-copy h1 span {
+    color: var(--aqua);
+}
+
+.auth-visual-copy p {
+    max-width: 530px;
+
+    font-size: 1.05rem;
+
+    line-height: 1.9;
+
+    color: #D0E5F5;
+}
+
+.auth-visual-footer {
+    color: #A9C5D9;
+
+    font-size: .82rem;
+}
+
+.auth-content {
+    min-height: 100vh;
+
+    display: flex;
+
+    flex-direction: column;
+
+    justify-content: center;
+
+    align-items: center;
+
+    padding: 2rem clamp(1rem, 4vw, 4rem);
+
+    background:
+        radial-gradient(
+            circle at 80% 10%,
+            rgba(22,198,194,.08),
+            transparent 40%
+        ),
+        #071B33;
+}
+
+.auth-brand {
+    display: none !important;
+}
+
+.auth-alert-container {
+    width: 100%;
+
+    max-width: 510px;
+}
+
+.auth-content .form-card {
+    width: 100%;
+
+    max-width: 510px !important;
+
+    background: rgba(12,43,71,.86) !important;
+
+    border: 1px solid rgba(144,202,235,.18) !important;
+
+    border-radius: 24px !important;
+
+    padding: clamp(1.4rem, 3vw, 2.5rem) !important;
+
+    box-shadow:
+        0 25px 70px rgba(0,0,0,.35) !important;
+}
+
+.auth-footer {
+    color: #7796AE !important;
+
+    margin-top: 1.5rem;
+}
+
+/* ---------------- AUTH PAGE MOTION ---------------- */
+
+.auth-content .form-card {
+    animation: authCardIn .6s ease both;
+}
+
+@keyframes authCardIn {
+    from {
+        opacity: 0;
+
+        transform: translateY(20px);
+    }
+
+    to {
+        opacity: 1;
+
+        transform: translateY(0);
+    }
+}
+
+/* ---------------- RESPONSIVE ---------------- */
+
+@media (max-width: 1100px) {
+
+    :root {
+        --sidebar-width: 230px;
+    }
+
+    .page-container {
+        padding: 1.7rem !important;
+    }
+
+    .choice-card {
+        min-height: 280px;
+    }
+
+}
+
+@media (max-width: 800px) {
+
+    .auth-page-wrapper {
+        grid-template-columns: 1fr;
+
+        max-width: 600px !important;
+
+        min-height: auto;
+    }
+
+    .auth-visual {
+        min-height: 300px;
+
+        padding: 2rem;
+    }
+
+    .auth-visual-copy h1 {
+        font-size: 2.5rem;
+    }
+
+    .auth-visual-footer {
+        margin-top: 2rem;
+    }
+
+    .auth-content {
+        min-height: auto;
+
+        padding: 2rem 1rem;
+    }
+
+    .choice-grid {
+        grid-template-columns: 1fr !important;
+    }
+
+}
+
+@media (max-width: 768px) {
+
+    .app-sidebar {
+        transform: translateX(-100%);
+    }
+
+    .app-sidebar.open {
+    transform: translateX(0);
+}
+
+    .app-main {
+        margin-left: 0 !important;
+    }
+
+    .app-header {
+        height: 65px !important;
+
+        padding: 0 1rem !important;
+    }
+
+    .header-toggle-btn {
+        display: block !important;
+
+        color: white !important;
+    }
+
+    .header-breadcrumb {
+        font-size: .75rem !important;
+    }
+
+    .header-right {
+        gap: .4rem !important;
+    }
+
+    .header-right .btn {
+        padding: .5rem .65rem !important;
+
+        font-size: .7rem !important;
+    }
+
+    .page-container {
+        padding: 1.2rem !important;
+    }
+
+    .stats-grid {
+        grid-template-columns:
+            repeat(2, minmax(0, 1fr)) !important;
+    }
+
+    .metrics-grid {
+        grid-template-columns:
+            repeat(2, minmax(0, 1fr));
+    }
+
+    .table-card {
+        padding: 1rem !important;
+    }
+
+}
+
+@media (max-width: 480px) {
+
+    .stats-grid,
+    .metrics-grid {
+        grid-template-columns: 1fr !important;
+    }
+
+    .auth-visual {
+        min-height: 250px;
+
+        padding: 1.5rem;
+    }
+
+    .auth-visual-copy h1 {
+        font-size: 2rem;
+    }
+
+    .auth-content .form-card {
+        padding: 1.3rem !important;
+    }
+
+    .page-container h1 {
+        font-size: 1.65rem !important;
+    }
+
+    .user-profile-badge span {
+        display: none;
+    }
+
+    #map,
+    #admin-map {
+        min-height: 300px;
+    }
+
+}
+
+/* ---------------- ACCESSIBILITY ---------------- */
+
+button:focus-visible,
+a:focus-visible,
+input:focus-visible {
+    outline: 3px solid var(--aqua);
+
+    outline-offset: 3px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+
+    *,
+    *::before,
+    *::after {
+        animation-duration: .01ms !important;
+
+        animation-iteration-count: 1 !important;
+
+        transition-duration: .01ms !important;
+
+        scroll-behavior: auto !important;
+    }
+
+}
+/* ==========================================
+   URBAN FLOODGUARD - IMAGE BACKGROUNDS
+   ========================================== */
+
+/* Main dashboard background */
+
+body {
+    background:
+        linear-gradient(
+            120deg,
+            rgba(4, 20, 38, .94),
+            rgba(7, 27, 51, .88)
+        ),
+        url("https://images.unsplash.com/photo-1433863448220-78aaa064ff47?auto=format&fit=crop&w=1920&q=85")
+        center center / cover fixed no-repeat !important;
+}
+
+/* Dashboard welcome banner */
+
+.dashboard-hero {
+    position: relative;
+    overflow: hidden;
+    min-height: 260px;
+    padding: 40px;
+    border-radius: 24px;
+
+    background:
+        linear-gradient(
+            90deg,
+            rgba(4, 20, 38, .96),
+            rgba(4, 40, 67, .65)
+        ),
+        url("https://images.unsplash.com/photo-1519692933481-e162a57d6721?auto=format&fit=crop&w=1600&q=85")
+        center / cover no-repeat;
+
+    border: 1px solid rgba(22,198,194,.2);
+    box-shadow: var(--shadow);
+}
+
+/* Automatic location card */
+
+.location-auto-card {
+    background:
+        linear-gradient(
+            135deg,
+            rgba(4,20,38,.92),
+            rgba(8,126,188,.65)
+        ),
+        url("https://images.unsplash.com/photo-1518837695005-2083093ee35b?auto=format&fit=crop&w=1000&q=85")
+        center / cover no-repeat !important;
+}
+
+/* Manual location card */
+
+.location-manual-card {
+    background:
+        linear-gradient(
+            135deg,
+            rgba(4,20,38,.93),
+            rgba(8,126,188,.55)
+        ),
+        url("https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=1000&q=85")
+        center / cover no-repeat !important;
+}
+
+/* Flood result hero */
+
+.result-hero {
+    position: relative;
+    padding: 35px;
+    border-radius: 24px;
+    overflow: hidden;
+
+    background:
+        linear-gradient(
+            100deg,
+            rgba(4,20,38,.96),
+            rgba(4,40,67,.65)
+        ),
+        url("https://images.unsplash.com/photo-1547683905-f686c993aae5?auto=format&fit=crop&w=1600&q=85")
+        center / cover no-repeat;
+}
+
+/* High risk */
+
+.result-hero.high-risk {
+    background:
+        linear-gradient(
+            100deg,
+            rgba(55,5,12,.96),
+            rgba(130,20,30,.70)
+        ),
+        url("https://images.unsplash.com/photo-1547683905-f686c993aae5?auto=format&fit=crop&w=1600&q=85")
+        center / cover no-repeat;
+}
+
+/* Medium risk */
+
+.result-hero.medium-risk {
+    background:
+        linear-gradient(
+            100deg,
+            rgba(55,35,4,.96),
+            rgba(130,90,15,.70)
+        ),
+        url("https://images.unsplash.com/photo-1519692933481-e162a57d6721?auto=format&fit=crop&w=1600&q=85")
+        center / cover no-repeat;
+}
+
+/* Low risk */
+
+.result-hero.low-risk {
+    background:
+        linear-gradient(
+            100deg,
+            rgba(3,45,35,.96),
+            rgba(10,100,75,.65)
+        ),
+        url("https://images.unsplash.com/photo-1470252649378-9c29740c9fa8?auto=format&fit=crop&w=1600&q=85")
+        center / cover no-repeat;
+}
+
+/* Admin dashboard banner */
+
+.admin-hero {
+    padding: 32px;
+    min-height: 200px;
+    border-radius: 22px;
+
+    background:
+        linear-gradient(
+            100deg,
+            rgba(4,20,38,.95),
+            rgba(8,126,188,.65)
+        ),
+        url("https://images.unsplash.com/photo-1534088568595-a066f410bcda?auto=format&fit=crop&w=1600&q=85")
+        center / cover no-repeat;
+}
+
+/* Weather cards */
+
+.weather-image-card {
+    position: relative;
+    overflow: hidden;
+    border-radius: 20px;
+    min-height: 160px;
+    background:
+        linear-gradient(
+            135deg,
+            rgba(4,20,38,.88),
+            rgba(8,126,188,.55)
+        ),
+        url("https://images.unsplash.com/photo-1534088568595-a066f410bcda?auto=format&fit=crop&w=900&q=85")
+        center / cover no-repeat;
+}
+
+/* History banner */
+
+.history-hero {
+    padding: 28px;
+    border-radius: 20px;
+
+    background:
+        linear-gradient(
+            100deg,
+            rgba(4,20,38,.95),
+            rgba(8,126,188,.55)
+        ),
+        url("https://images.unsplash.com/photo-1518837695005-2083093ee35b?auto=format&fit=crop&w=1400&q=85")
+        center / cover no-repeat;
+}
+
+/* Image overlays */
+
+.dashboard-hero,
+.result-hero,
+.admin-hero,
+.history-hero {
+    background-size: cover;
+    background-position: center;
+}
+
+/* Responsive */
+
+@media(max-width:768px) {
+    .dashboard-hero,
+    .result-hero,
+    .admin-hero,
+    .history-hero {
+        padding: 22px;
+        min-height: 180px;
+    }
+}

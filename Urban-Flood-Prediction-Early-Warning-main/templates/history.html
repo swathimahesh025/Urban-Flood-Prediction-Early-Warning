@@ -1,0 +1,619 @@
+{% extends "base.html" %}
+
+{% block title %}Assessment History | Urban FloodGuard{% endblock %}
+
+{% block breadcrumb %}
+Assessment History Audit Trail
+{% endblock %}
+
+{% block content %}
+
+<!-- PAGE HEADER -->
+
+<div style="
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:2rem;
+    flex-wrap:wrap;
+    gap:1rem;
+">
+
+    <div>
+
+        <h1 style="
+            font-size:2rem;
+            font-weight:800;
+            letter-spacing:-0.02em;
+            margin-bottom:0.3rem;
+        ">
+            Assessment History Log
+        </h1>
+
+        <p style="
+            color:var(--text-muted);
+            font-size:0.95rem;
+        ">
+            Chronological audit trail of past meteorological queries
+            and machine learning risk evaluations.
+        </p>
+
+    </div>
+
+
+    <a href="{{ url_for('dashboard') }}"
+       class="btn btn-primary">
+
+        <span>+ New Assessment</span>
+
+    </a>
+
+</div>
+
+
+<!-- HISTORY TABLE -->
+
+<div class="table-card">
+
+    {% if predictions and predictions|length > 0 %}
+
+
+    <!-- DELETE FORM -->
+
+    <form
+        id="historyDeleteForm"
+        action="{{ url_for('delete_history') }}"
+        method="POST"
+        onsubmit="return confirmHistoryDelete();">
+
+
+        <!-- BULK ACTION TOOLBAR -->
+
+        <div style="
+            display:flex;
+            justify-content:space-between;
+            align-items:center;
+            gap:1rem;
+            flex-wrap:wrap;
+            margin-bottom:1rem;
+            padding:0.8rem;
+            border-radius:12px;
+            background:rgba(255,255,255,0.03);
+        ">
+
+
+            <!-- SELECT ALL -->
+
+            <label style="
+                display:flex;
+                align-items:center;
+                gap:9px;
+                color:var(--text-muted);
+                font-weight:600;
+                cursor:pointer;
+            ">
+
+                <input
+                    type="checkbox"
+                    id="selectAllHistory"
+                    style="
+                        width:17px;
+                        height:17px;
+                        accent-color:#6045ff;
+                        cursor:pointer;
+                    "
+                >
+
+                Select All Records
+
+            </label>
+
+
+            <!-- SELECTED COUNT -->
+
+            <span style="
+                color:var(--text-muted);
+                font-size:0.85rem;
+            ">
+
+                Selected:
+                <strong id="selectedHistoryCount">0</strong>
+
+            </span>
+
+
+            <!-- DELETE SELECTED BUTTON -->
+
+            <button
+                type="submit"
+                id="deleteSelectedBtn"
+                class="btn btn-danger"
+                disabled
+                style="
+                    padding:0.7rem 1rem;
+                    opacity:0.55;
+                    cursor:not-allowed;
+                ">
+
+                🗑 Delete Selected
+
+            </button>
+
+        </div>
+
+
+        <!-- TABLE -->
+
+        <div class="table-responsive">
+
+            <table class="modern-table">
+
+                <thead>
+
+                    <tr>
+
+                        <th style="width:48px;">
+                            Select
+                        </th>
+
+                        <th>Date &amp; Time</th>
+
+                        <th>Location</th>
+
+                        <th>Coordinates</th>
+
+                        <th>Rainfall</th>
+
+                        <th>Humidity</th>
+
+                        <th>Risk Classification</th>
+
+                        <th>Confidence</th>
+
+                        <th>Emergency Alert</th>
+
+                        <th>Actions</th>
+
+                        <th>Delete</th>
+
+                    </tr>
+
+                </thead>
+
+
+                <tbody>
+
+                    {% for p in predictions %}
+
+                    <tr>
+
+                        <!-- INDIVIDUAL CHECKBOX -->
+
+                        <td>
+
+                            <input
+                                class="history-checkbox"
+                                type="checkbox"
+                                name="prediction_ids"
+                                value="{{ p.id }}"
+                                aria-label="Select history record {{ p.id }}"
+                                style="
+                                    width:17px;
+                                    height:17px;
+                                    accent-color:#6045ff;
+                                    cursor:pointer;
+                                "
+                            >
+
+                        </td>
+
+
+                        <!-- DATE -->
+
+                        <td style="
+                            color:var(--text-muted);
+                            font-size:0.86rem;
+                            white-space:nowrap;
+                        ">
+
+                            {{ p.created_at }}
+
+                        </td>
+
+
+                        <!-- LOCATION -->
+
+                        <td>
+
+                            <strong>
+                                {{ p.location_name }}
+                            </strong>
+
+                        </td>
+
+
+                        <!-- COORDINATES -->
+
+                        <td style="
+                            color:#94a3b8;
+                            font-size:0.85rem;
+                            font-family:monospace;
+                        ">
+
+                            {{ "%.3f"|format(p.latitude) }},
+                            {{ "%.3f"|format(p.longitude) }}
+
+                        </td>
+
+
+                        <!-- RAINFALL -->
+
+                        <td>
+
+                            <strong>
+                                {{ p.rainfall }} mm
+                            </strong>
+
+                        </td>
+
+
+                        <!-- HUMIDITY -->
+
+                        <td>
+
+                            {{ p.humidity }}%
+
+                        </td>
+
+
+                        <!-- RISK CLASSIFICATION -->
+
+                        <td>
+
+                            {% if p.risk_level == 'High Risk' %}
+
+                                <span class="status-badge badge-high">
+                                    ● High Risk
+                                </span>
+
+                            {% elif p.risk_level == 'Medium Risk' %}
+
+                                <span class="status-badge badge-med">
+                                    ● Medium Risk
+                                </span>
+
+                            {% else %}
+
+                                <span class="status-badge badge-low">
+                                    ● Low Risk
+                                </span>
+
+                            {% endif %}
+
+                        </td>
+
+
+                        <!-- CONFIDENCE -->
+
+                        <td>
+
+                            <strong style="color:#fff;">
+
+                                {{ "%.1f"|format(p.probability) }}%
+
+                            </strong>
+
+                        </td>
+
+
+                        <!-- EMERGENCY ALERT -->
+
+                        <td>
+
+                            {% if p.alert_triggered %}
+
+                                <span style="
+                                    color:var(--accent-pink);
+                                    font-weight:700;
+                                    font-size:0.85rem;
+                                ">
+
+                                    🚨 Dispatched
+
+                                </span>
+
+                            {% else %}
+
+                                <span style="
+                                    color:var(--text-dim);
+                                    font-size:0.85rem;
+                                ">
+
+                                    Normal
+
+                                </span>
+
+                            {% endif %}
+
+                        </td>
+
+
+                        <!-- VIEW REPORT -->
+
+                        <td>
+
+                            <a
+                                href="{{ url_for(
+                                    'result_view',
+                                    prediction_id=p.id
+                                ) }}"
+                                class="btn btn-secondary"
+                                style="
+                                    padding:6px 14px;
+                                    font-size:0.82rem;
+                                    border-radius:var(--radius-sm);
+                                    text-decoration:none;
+                                ">
+
+                                View Report &rarr;
+
+                            </a>
+
+                        </td>
+
+
+                        <!-- INDIVIDUAL DELETE -->
+
+                        <td>
+
+                            <button
+                                type="submit"
+                                name="delete_id"
+                                value="{{ p.id }}"
+                                class="btn btn-danger"
+                                style="
+                                    padding:6px 12px;
+                                    font-size:0.82rem;
+                                    border-radius:var(--radius-sm);
+                                    white-space:nowrap;
+                                "
+                                onclick="
+                                    return confirm(
+                                        'Are you sure you want to permanently delete this history record?'
+                                    );
+                                ">
+
+                                🗑 Delete
+
+                            </button>
+
+                        </td>
+
+                    </tr>
+
+                    {% endfor %}
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </form>
+
+
+    {% else %}
+
+
+    <!-- EMPTY HISTORY -->
+
+    <div style="
+        text-align:center;
+        padding:4.5rem 2rem;
+    ">
+
+        <div style="
+            font-size:3.5rem;
+            margin-bottom:1rem;
+        ">
+
+            📁
+
+        </div>
+
+        <h3 style="
+            font-size:1.4rem;
+            font-weight:700;
+        ">
+
+            No Past Assessments Recorded
+
+        </h3>
+
+        <p style="
+            color:var(--text-muted);
+            margin:0.5rem auto 1.8rem;
+            max-width:480px;
+            font-size:0.95rem;
+        ">
+
+            No assessment records are currently available.
+            Run a new assessment using GPS auto-fetch
+            or manual city search.
+
+        </p>
+
+        <a
+            href="{{ url_for('dashboard') }}"
+            class="btn btn-primary"
+            style="padding:0.9rem 2rem;">
+
+            <span>
+                🚀 Run First Flood Assessment
+            </span>
+
+        </a>
+
+    </div>
+
+
+    {% endif %}
+
+</div>
+
+{% endblock %}
+
+
+<!-- HISTORY JAVASCRIPT -->
+
+{% block scripts %}
+
+<script>
+
+(function () {
+
+    const selectAll =
+        document.getElementById("selectAllHistory");
+
+    const checkboxes = Array.from(
+        document.querySelectorAll(".history-checkbox")
+    );
+
+    const deleteButton =
+        document.getElementById("deleteSelectedBtn");
+
+    const countLabel =
+        document.getElementById("selectedHistoryCount");
+
+
+    // UPDATE SELECTED COUNT
+
+    function updateSelection() {
+
+        const selected = checkboxes.filter(
+            box => box.checked
+        ).length;
+
+
+        if (countLabel) {
+
+            countLabel.textContent = selected;
+
+        }
+
+
+        // Enable/disable bulk delete
+
+        if (deleteButton) {
+
+            deleteButton.disabled = selected === 0;
+
+            deleteButton.style.opacity =
+                selected === 0 ? "0.55" : "1";
+
+            deleteButton.style.cursor =
+                selected === 0 ? "not-allowed" : "pointer";
+
+        }
+
+
+        // Update Select All state
+
+        if (selectAll) {
+
+            selectAll.checked =
+                checkboxes.length > 0 &&
+                selected === checkboxes.length;
+
+            selectAll.indeterminate =
+                selected > 0 &&
+                selected < checkboxes.length;
+
+        }
+
+    }
+
+
+    // SELECT ALL RECORDS
+
+    if (selectAll) {
+
+        selectAll.addEventListener(
+            "change",
+            function () {
+
+                checkboxes.forEach(
+                    box => {
+                        box.checked = selectAll.checked;
+                    }
+                );
+
+                updateSelection();
+
+            }
+        );
+
+    }
+
+
+    // INDIVIDUAL SELECTION
+
+    checkboxes.forEach(
+        box => {
+
+            box.addEventListener(
+                "change",
+                updateSelection
+            );
+
+        }
+    );
+
+
+    // CONFIRM DELETE
+
+    window.confirmHistoryDelete = function () {
+
+        const selected = checkboxes.filter(
+            box => box.checked
+        ).length;
+
+        const submitter =
+            document.activeElement;
+
+        // Individual delete button
+        if (
+            submitter &&
+            submitter.name === "delete_id"
+        ) {
+
+            return true;
+
+        }
+
+        if (selected === 0) {
+
+            alert(
+                "Please select at least one history record."
+            );
+
+            return false;
+
+        }
+
+        return confirm(
+            "Are you sure you want to permanently delete " +
+            selected +
+            " selected history record(s)? This action cannot be undone."
+        );
+
+    };
+
+
+    updateSelection();
+
+})();
+
+</script>
+
+{% endblock %}

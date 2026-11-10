@@ -1,0 +1,570 @@
+
+{% extends "base.html" %}
+
+{% block title %}Urban Flood Risk Dashboard | HydroAlert Karnataka{% endblock %}
+
+{% block breadcrumb %}Urban Flood Risk Assessment Dashboard{% endblock %}
+
+{% block content %}
+
+<!-- ==========================================
+     PREMIUM DASHBOARD WELCOME HERO
+=========================================== -->
+
+<section class="dashboard-hero">
+    <div class="dashboard-hero-overlay"></div>
+
+    <div class="dashboard-hero-content">
+        <span class="hero-eyebrow">
+            🌧️ HYDROALERT KARNATAKA
+        </span>
+
+        <h1>
+            Urban Flood Risk<br>
+            Surveillance
+        </h1>
+
+        
+        <div class="hero-status">
+            <span class="status-dot"></span>
+            Intelligent Flood Monitoring System
+        </div>
+
+        
+    </div>
+</section>
+
+
+<!-- ==========================================
+     AUTO LOCATION FEEDBACK
+=========================================== -->
+
+<div
+    id="auto-status"
+    class="alert"
+    style="display: none; max-width: 800px; margin: 0 auto 2rem;"
+>
+</div>
+
+
+<!-- ==========================================
+     LOCATION ASSESSMENT SECTION
+=========================================== -->
+
+<section class="location-selection-section">
+
+    <div class="section-heading">
+        <span class="section-eyebrow">FLOOD RISK ASSESSMENT</span>
+
+        <h2>Choose Your Location</h2>
+
+        <p>
+            Select your preferred assessment method to evaluate
+            the current flood risk in your region.
+        </p>
+    </div>
+
+
+    <div class="choice-grid premium-choice-grid">
+
+        <!-- GPS AUTO LOCATION CARD -->
+
+        <div class="choice-card location-auto-card">
+
+            <div class="location-card-content">
+
+                <div class="choice-icon-wrap">
+                    📡
+                </div>
+
+                <span class="card-label">
+                    AUTOMATIC DETECTION
+                </span>
+
+                <h3>Auto-Fetch GPS Location</h3>
+
+                <p>
+                    Automatically identify your current geographical
+                    coordinates using your device's browser GPS.
+                    
+                </p>
+
+                
+
+            </div>
+
+            <button
+                id="btn-autolocate"
+                class="btn btn-primary btn-block location-action-btn"
+                type="button"
+            >
+                <span>📡</span>
+                Auto-Fetch My GPS Location
+                <span class="button-arrow">→</span>
+            </button>
+
+        </div>
+
+
+        <!-- MANUAL LOCATION CARD -->
+
+        <div class="choice-card pink-glow location-manual-card">
+
+            <div class="location-card-content">
+
+                <div class="choice-icon-wrap pink">
+                    🏙️
+                </div>
+
+                <span class="card-label">
+                    MANUAL REGION SELECTION
+                </span>
+
+                <h3>Manual Location Search</h3>
+
+                <p>
+                    Select your preferred .
+                </p>
+
+                
+
+            </div>
+
+            <a
+                href="{{ url_for('custom_location') }}"
+                class="btn btn-accent btn-block location-action-btn"
+            >
+                <span>🔍</span>
+                Select Karnataka Region
+                <span class="button-arrow">→</span>
+            </a>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- ==========================================
+     HOW IT WORKS
+=========================================== -->
+
+
+<!-- ==========================================
+     DASHBOARD FOOTER BANNER
+=========================================== -->
+
+
+
+<!-- ==========================================
+     DASHBOARD PAGE STYLES
+=========================================== -->
+
+<style>
+
+/* Main hero */
+
+.dashboard-hero {
+    position: relative;
+    isolation: isolate;
+    min-height: 340px;
+    display: flex;
+    align-items: center;
+    padding: 55px 48px;
+    margin-bottom: 42px;
+    overflow: hidden;
+    border-radius: 24px;
+
+    background-image:
+        linear-gradient(
+            90deg,
+            rgba(4, 24, 48, 0.96) 0%,
+            rgba(4, 45, 75, 0.82) 55%,
+            rgba(4, 45, 75, 0.30) 100%
+        ),
+        url("https://images.unsplash.com/photo-1518837695005-2083093ee35b?auto=format&fit=crop&w=1800&q=85");
+
+    background-size: cover;
+    background-position: center;
+    box-shadow: 0 18px 45px rgba(0, 30, 65, 0.20);
+}
+
+.dashboard-hero-overlay {
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background: linear-gradient(
+        120deg,
+        rgba(8, 126, 188, 0.15),
+        transparent 65%
+    );
+}
+
+.dashboard-hero-content {
+    max-width: 760px;
+    color: #ffffff;
+}
+
+.hero-eyebrow,
+.section-eyebrow {
+    display: inline-block;
+    color: #16c6c2;
+    font-size: 0.76rem;
+    font-weight: 800;
+    letter-spacing: 2px;
+    margin-bottom: 15px;
+}
+
+.dashboard-hero h1 {
+    color: #ffffff;
+    font-size: clamp(2.2rem, 4vw, 3.25rem);
+    font-weight: 850;
+    line-height: 1.12;
+    letter-spacing: -1px;
+    margin: 0 0 18px;
+}
+
+.dashboard-hero-content > p {
+    color: #e4f1fc;
+    font-size: 0.98rem;
+    line-height: 1.8;
+    max-width: 660px;
+    margin-bottom: 20px;
+}
+
+.hero-status {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 17px;
+    border-radius: 30px;
+    border: 1px solid rgba(255,255,255,0.28);
+    background: rgba(255,255,255,0.12);
+    color: #ffffff;
+    font-size: 0.85rem;
+    font-weight: 600;
+}
+
+.status-dot {
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
+    background: #42e6b5;
+    box-shadow: 0 0 12px #42e6b5;
+}
+
+.hero-features {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 18px;
+    margin-top: 23px;
+}
+
+.hero-features span {
+    color: #e5f5ff;
+    font-size: 0.82rem;
+    font-weight: 600;
+}
+
+
+/* Section heading */
+
+.location-selection-section {
+    margin-bottom: 55px;
+}
+
+.section-heading {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.section-heading h2,
+.workflow-title-wrap h3 {
+    color: var(--text-main, #102d49);
+    font-size: clamp(1.65rem, 3vw, 2.1rem);
+    font-weight: 800;
+    margin-bottom: 10px;
+}
+
+.section-heading p,
+.workflow-title-wrap > p {
+    color: var(--text-muted, #64748b);
+    line-height: 1.7;
+}
+
+
+/* Location cards */
+
+.premium-choice-grid {
+    gap: 25px;
+}
+
+.location-auto-card,
+.location-manual-card {
+    position: relative;
+    isolation: isolate;
+    overflow: hidden;
+    min-height: 410px;
+    padding: 30px !important;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    border-radius: 22px;
+    background-size: cover;
+    background-position: center;
+    border: 1px solid rgba(255,255,255,0.2);
+    box-shadow: 0 12px 35px rgba(0, 30, 65, 0.13);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.location-auto-card {
+    background-image:
+        linear-gradient(
+            145deg,
+            rgba(4, 27, 53, 0.95),
+            rgba(8, 91, 139, 0.83)
+        ),
+        url("https://images.unsplash.com/photo-1534088568595-a066f410bcda?auto=format&fit=crop&w=1100&q=85");
+}
+
+.location-manual-card {
+    background-image:
+        linear-gradient(
+            145deg,
+            rgba(4, 27, 53, 0.95),
+            rgba(8, 91, 139, 0.83)
+        ),
+        url("https://images.unsplash.com/photo-1547683905-f686c993aae5?auto=format&fit=crop&w=1100&q=85");
+}
+
+.location-auto-card:hover,
+.location-manual-card:hover {
+    transform: translateY(-7px);
+    box-shadow: 0 20px 42px rgba(0, 30, 65, 0.22);
+}
+
+.location-card-content {
+    position: relative;
+    z-index: 1;
+}
+
+.choice-icon-wrap {
+    width: 58px;
+    height: 58px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 16px;
+    background: rgba(22, 198, 194, 0.20);
+    border: 1px solid rgba(22, 198, 194, 0.45);
+    font-size: 1.65rem;
+    margin-bottom: 22px;
+}
+
+.choice-icon-wrap.pink {
+    background: rgba(255,255,255,0.15);
+    border-color: rgba(255,255,255,0.35);
+}
+
+.card-label {
+    display: block;
+    color: #70e8e1;
+    font-size: 0.70rem;
+    font-weight: 800;
+    letter-spacing: 1.5px;
+    margin-bottom: 10px;
+}
+
+.location-auto-card h3,
+.location-manual-card h3 {
+    color: #ffffff !important;
+    font-size: 1.45rem;
+    font-weight: 800;
+    margin-bottom: 14px;
+}
+
+.location-auto-card p,
+.location-manual-card p {
+    color: #e1efff !important;
+    font-size: 0.91rem;
+    line-height: 1.8;
+}
+
+.card-feature-list {
+    display: flex;
+    flex-direction: column;
+    gap: 9px;
+    margin-top: 18px;
+    margin-bottom: 24px;
+}
+
+.card-feature-list span {
+    color: #e5f6ff;
+    font-size: 0.82rem;
+    font-weight: 600;
+}
+
+.location-action-btn {
+    position: relative;
+    z-index: 2;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    min-height: 52px;
+    border-radius: 12px;
+    font-weight: 750;
+    text-decoration: none;
+}
+
+.button-arrow {
+    margin-left: 5px;
+}
+
+
+/* Workflow */
+
+.workflow-section {
+    padding: 38px 0;
+    margin-bottom: 35px;
+}
+
+.workflow-title-wrap {
+    text-align: center;
+    margin-bottom: 32px;
+}
+
+.workflow-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 22px;
+}
+
+.workflow-step-card {
+    position: relative;
+    padding: 30px 25px;
+    border-radius: 19px;
+    background: var(--surface, #ffffff);
+    border: 1px solid var(--border, #e3edf5);
+    box-shadow: 0 8px 25px rgba(15, 45, 75, 0.06);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.workflow-step-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 15px 30px rgba(15, 45, 75, 0.11);
+}
+
+.step-number-badge {
+    width: 39px;
+    height: 39px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 12px;
+    background: #087ebc;
+    color: #ffffff;
+    font-weight: 800;
+    margin-bottom: 19px;
+}
+
+.workflow-icon {
+    font-size: 1.9rem;
+    margin-bottom: 13px;
+}
+
+.workflow-step-card h4 {
+    color: var(--text-main, #102d49);
+    font-size: 1.08rem;
+    font-weight: 800;
+    margin-bottom: 12px;
+}
+
+.workflow-step-card p {
+    color: var(--text-muted, #64748b);
+    font-size: 0.87rem;
+    line-height: 1.8;
+}
+
+
+/* Footer banner */
+
+.dashboard-footer-banner {
+    padding: 25px 30px;
+    margin-bottom: 20px;
+    border-radius: 18px;
+    background: linear-gradient(110deg, #071b33, #087ebc);
+    color: #ffffff;
+}
+
+.dashboard-footer-banner > div {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+.footer-banner-icon {
+    font-size: 2.5rem;
+}
+
+.dashboard-footer-banner h3 {
+    color: #ffffff;
+    font-size: 1.15rem;
+    font-weight: 800;
+    margin-bottom: 6px;
+}
+
+.dashboard-footer-banner p {
+    color: #d8edff;
+    font-size: 0.88rem;
+    line-height: 1.6;
+    margin: 0;
+}
+
+
+/* Responsive design */
+
+@media (max-width: 900px) {
+    .workflow-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
+@media (max-width: 768px) {
+    .dashboard-hero {
+        min-height: 330px;
+        padding: 35px 25px;
+    }
+
+    .dashboard-hero h1 {
+        font-size: 2.25rem;
+    }
+
+    .hero-features {
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .premium-choice-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .workflow-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .location-auto-card,
+    .location-manual-card {
+        min-height: 390px;
+        padding: 24px !important;
+    }
+
+    .dashboard-footer-banner {
+        padding: 22px;
+    }
+}
+
+</style>
+
+{% endblock %}

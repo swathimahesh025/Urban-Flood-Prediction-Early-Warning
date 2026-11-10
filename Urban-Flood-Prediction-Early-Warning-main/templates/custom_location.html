@@ -1,0 +1,61 @@
+{% extends "base.html" %}
+
+{% block title %}Karnataka Region Flood Surveillance | HydroAlert{% endblock %}
+{% block breadcrumb %}Monitored Karnataka Region Search{% endblock %}
+
+{% block content %}
+<div class="form-card" style="max-width: 680px; border-top: 4px solid var(--accent-pink);">
+    <div class="form-header">
+        <div class="header-icon-badge" style="background: rgba(247, 37, 133, 0.15); color: var(--accent-pink);">
+            🏙️
+        </div>
+        <h2>Karnataka Regional Flood Surveillance</h2>
+        <p>Select or type one of the 7 designated Karnataka flood monitoring regions</p>
+    </div>
+
+    <form action="{{ url_for('predict_manual') }}" method="POST">
+        <div class="form-group">
+            <label for="city_name_input">Location Name</label>
+            <div class="input-wrapper">
+                <span class="input-icon">🔍</span>
+                <input 
+                    type="text" 
+                    id="city_name_input" 
+                    name="city_name" 
+                    class="form-control" 
+                    placeholder="e.g. Bengaluru Urban, Dakshina Kannada, Udupi..." 
+                    required 
+                    autofocus
+                >
+            </div>
+            <small class="field-hint">Note: System monitors designated Karnataka flood zones only. Other locations will display 'Not Applicable'.</small>
+        </div>
+
+        <button type="submit" class="btn btn-accent btn-block" style="padding: 1rem; margin-top: 1.2rem;">
+            <span>Evaluate Flood Threat Level</span>
+        </button>
+    </form>
+
+    <!-- Quick preset chips matching Image 1 -->
+    <div style="margin-top: 2.2rem;">
+        <label style="font-size: 0.85rem; font-weight: 600; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.05em;">
+            Designated Monitored Zones:
+        </label>
+        <div style="display: flex; flex-wrap: wrap; gap: 9px; margin-top: 0.8rem;">
+            <button type="button" class="city-chip btn btn-secondary" style="padding: 6px 14px; font-size: 0.85rem; border-radius: 999px;" data-city="Bengaluru Urban">🌧️ Begaluru Urban</button>
+            <button type="button" class="city-chip btn btn-secondary" style="padding: 6px 14px; font-size: 0.85rem; border-radius: 999px;" data-city="Dakshina Kannada">⛅ Dakshina Kannada</button>
+            <button type="button" class="city-chip btn btn-secondary" style="padding: 6px 14px; font-size: 0.85rem; border-radius: 999px;" data-city="Udupi">⛈️ Udupi</button>
+            <button type="button" class="city-chip btn btn-secondary" style="padding: 6px 14px; font-size: 0.85rem; border-radius: 999px;" data-city="Uttar Kannada">⛅ Uttar Kannada</button>
+            <button type="button" class="city-chip btn btn-secondary" style="padding: 6px 14px; font-size: 0.85rem; border-radius: 999px;" data-city="Shivamogga">🌧️ Shivamogga</button>
+            <button type="button" class="city-chip btn btn-secondary" style="padding: 6px 14px; font-size: 0.85rem; border-radius: 999px;" data-city="Chikkamagaluru">🌀 Chikkamagaluru</button>
+            <button type="button" class="city-chip btn btn-secondary" style="padding: 6px 14px; font-size: 0.85rem; border-radius: 999px;" data-city="Kodagu">🌧️ Kodagu</button>
+        </div>
+    </div>
+
+    <div style="margin-top: 2.2rem; text-align: center; border-top: 1px solid var(--card-border); padding-top: 1.5rem;">
+        <a href="{{ url_for('dashboard') }}" style="color: var(--primary-blue); text-decoration: none; font-size: 0.92rem; font-weight: 500;">
+            ← Return to GPS Auto-Fetch Dashboard
+        </a>
+    </div>
+</div>
+{% endblock %}

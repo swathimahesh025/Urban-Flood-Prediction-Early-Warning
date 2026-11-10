@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+
+{% block title %}Location Not Applicable | HydroAlert Karnataka{% endblock %}
+{% block breadcrumb %}Location Outside Monitored Zones{% endblock %}
+
+{% block content %}
+<div class="form-card" style="max-width: 680px; border-top: 4px solid var(--accent-pink); text-align: center;">
+    <div class="header-icon-badge" style="background: rgba(247, 37, 133, 0.15); color: var(--accent-pink); margin: 0 auto 1.4rem;">
+        ⚠️
+    </div>
+
+    <span style="display: inline-block; padding: 4px 14px; background: rgba(247, 37, 133, 0.15); border: 1px solid rgba(247, 37, 133, 0.3); border-radius: 999px; font-size: 0.8rem; font-weight: 700; color: #ff549a; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 1rem;">
+        Outside Surveillance Bounds
+    </span>
+
+    <h2 style="font-size: 1.9rem; font-weight: 800; letter-spacing: -0.02em; margin-bottom: 0.8rem;">
+        {% if queried_location %}{{ queried_location }}{% else %}Current Location{% endif %} &mdash; Not Applicable
+    </h2>
+
+    <p style="color: var(--text-muted); font-size: 0.95rem; line-height: 1.6; max-width: 540px; margin: 0 auto 1.8rem;">
+        This Early Warning System is calibrated exclusively for the
+        <strong style="color: #f1f5f9;">8 designated flood-vulnerability zones in Karnataka</strong>
+        (Bengaluru Urban, Dakshina Kannada, Udupi, Uttara Kannada, Shivamogga, Chikkamagaluru, Kodagu &amp; Mysuru)
+        in compliance with KSNDMC and IMD hydrology parameters.
+    </p>
+
+    <!-- Info box -->
+    <div style="background: rgba(14, 14, 26, 0.7); border: 1px solid var(--card-border); border-radius: var(--radius-md); padding: 1.4rem; margin-bottom: 2rem; text-align: left;">
+        <p style="font-size: 0.9rem; color: #94a3b8; line-height: 1.7; margin: 0;">
+            📍 <strong style="color: #cbd5e1;">Your queried location</strong>
+            <span style="color: #ff549a; font-weight: 700;">
+                "{% if queried_location %}{{ queried_location }}{% else %}Unknown{% endif %}"
+            </span>
+            does not fall within any of the monitored flood risk zones.<br/><br/>
+            To run a flood risk assessment, please use <strong style="color: #a5b4fc;">Auto-Fetch GPS Location</strong>
+            from the dashboard if you are physically located inside one of the 8 zones,
+            or use <strong style="color: #a5b4fc;">Manual Location Search</strong> to select a supported region.
+        </p>
+    </div>
+
+    <div style="display: flex; gap: 12px; justify-content: center; flex-wrap: wrap;">
+        <a href="{{ url_for('dashboard') }}" class="btn btn-primary" style="padding: 0.8rem 1.8rem;">
+            ← Return to Dashboard
+        </a>
+        <a href="{{ url_for('custom_location') }}" class="btn btn-secondary" style="padding: 0.8rem 1.8rem;">
+            🔍 Select Monitored Region
+        </a>
+    </div>
+</div>
+{% endblock %}
